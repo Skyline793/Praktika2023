@@ -9,7 +9,12 @@ namespace Praktika2023
 {
     internal abstract class Person
     {
-        public int Id { get; set; }
+        protected int Id;
+        protected int age;
+        public int Age
+        {
+            get { return age; }
+        }
         protected Rectangle body;
             public Rectangle Body
         {

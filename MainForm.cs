@@ -13,15 +13,18 @@ namespace Praktika2023
 
     public partial class MainForm : Form
     {
+        public static int DXY = 5;
         public static bool flag;
         private int numOfCashDesks;
+        private int numOfShelves;
         private int cashiersSpeed;
         private Supermarket supermarket;
-        private Rectangle exit;
+        private Rectangle entrance, exit;
         public MainForm()
         {
             InitializeComponent();
-            exit = new Rectangle(this.pictureBox1.Width / 2 - 100, -50, 200, 100);
+            exit = new Rectangle(this.pictureBox1.Width / 2 - MainForm.DXY*20, -MainForm.DXY * 10, MainForm.DXY * 40, MainForm.DXY * 20);
+            entrance = new Rectangle(this.pictureBox1.Width / 2 - MainForm.DXY * 20, this.pictureBox1.Height - MainForm.DXY * 10, MainForm.DXY * 40, MainForm.DXY * 20);
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -37,32 +40,31 @@ namespace Praktika2023
         {
 
             this.pictureBox1.Invalidate();
-            foreach (CashDesk desk in supermarket.Desks)
-                if(desk.Status == DeskStatus.open)
-                    desk.Shopping();
+            this.supermarket.Shoppings();
+            //foreach (CashDesk desk in supermarket.Desks)
+            //    if (desk.Status == DeskStatus.open)
+            //        desk.Shopping();
         }
 
         private void timer2_Tick(object sender, EventArgs e)
         {
+            timer2.Interval = Randomizer.Rand(2, 7) * 1000;
             this.supermarket.AddCustomer();
         }
 
         private void stopButton_Click(object sender, EventArgs e)
         {
-            timer1.Stop();
-            timer2.Stop();
-            flag = false;
-            supermarket = null;
-            this.pictureBox1.Invalidate();
+            StopSimulation();
         }
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            numOfCashDesks = 2;
+            numOfCashDesks = 3;
             cashiersSpeed = 2000;
+            numOfShelves = 2;
             try
             {
-                supermarket = new Supermarket(numOfCashDesks, 1, 20, 10, 1500, cashiersSpeed, pictureBox1.Size);
+                supermarket = new Supermarket(numOfCashDesks, numOfShelves, cashiersSpeed, pictureBox1.Size);
             }
             catch (Exception ex)
             {
@@ -70,22 +72,50 @@ namespace Praktika2023
                 return;
             }
             timer1.Start();
+            timer2.Interval = 1000;
             timer2.Start();
             flag = true;
         }
 
-        public void DrawObjects(Graphics g)
+        private void DrawObjects(Graphics g)
         {
             foreach (Customer customer in supermarket.Customers)
                 g.FillEllipse(new SolidBrush(customer.Color), customer.Body);
-            foreach(Cashier cashier in supermarket.cashiers)
+            foreach(Cashier cashier in supermarket.Cashiers)
                 g.FillEllipse(new SolidBrush(cashier.Color), cashier.Body);
             foreach (CashDesk desk in supermarket.Desks)
                 g.FillRectangle(new SolidBrush(desk.Color), desk.Form);
-            g.FillPie(new SolidBrush(Color.Brown), new Rectangle(this.pictureBox1.Width / 2 - 100, this.pictureBox1.Height - 50, 200, 100), 180, 180);
+            foreach(ProductShelf shelf in supermarket.Shelves)
+                g.FillRectangle(new SolidBrush(shelf.Color), shelf.Form);
+            g.FillPie(new SolidBrush(Color.Brown), entrance, 180, 180);
             g.DrawString("ЗОНА КАСС", new Font("Arial", 14), new SolidBrush(Color.Black), this.pictureBox1.Width / 2 - 65, this.pictureBox1.Height - 30);
            g.FillPie(new SolidBrush(Color.Brown), exit, 0, 180);
             g.DrawString("ВЫХОД", new Font("Arial", 14), new SolidBrush(Color.Black), this.pictureBox1.Width / 2 - 45, 15);
+        }
+
+        private void StopSimulation()
+        {
+            timer1.Stop();
+            timer2.Stop();
+            foreach (Customer customer in supermarket.Customers)
+            {
+                if (customer.Thread!=null && customer.Thread.IsAlive)
+                    customer.Thread.Abort();
+            }
+            foreach(CashDesk desk in supermarket.Desks)
+            {
+                if(desk.Thread!= null && desk.Thread.IsAlive)
+                    desk.Thread.Abort();
+            }
+            flag = false;
+            supermarket = null;
+            this.pictureBox1.Invalidate();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(supermarket!=null)
+                StopSimulation();
         }
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)

@@ -21,10 +21,14 @@ namespace Praktika2023
     {
         private int averageCheck;
         private List<int> checks;
-        private static int vaxCustomers = 10;
+        public List<int> Checks
+        {
+            get { return checks; }
+        }
+        private static int maxCustomers = 10;
         public static int MaxCustomers
         {
-            get { return vaxCustomers; }
+            get { return maxCustomers; }
         }
         private Rectangle form;
         public Rectangle Form
@@ -55,15 +59,16 @@ namespace Praktika2023
         public int CountOfCustomers
         {
             get
-            { 
-                countOfCustomers = queue.Count; 
-                return countOfCustomers; 
+            {
+                countOfCustomers = queue.Count;
+                return countOfCustomers;
             }
-                
+
         }
         private Cashier cashier;
         public Cashier Cashier
         {
+            get { return cashier; }
             set
             {
                 cashier = value;
@@ -76,6 +81,10 @@ namespace Praktika2023
             get
             {
                 return status;
+            }
+            set
+            {
+                status = value;
             }
         }
         public CashDesk(Point position, Size size, Color color)
@@ -90,25 +99,15 @@ namespace Praktika2023
 
         public void AddCustomerToQueue(Customer customer)
         {
-            
-            if (queue.Count!=0)
-            customer.MoveTo(this.queue.ElementAt(this.queue.Count-1));
+
+            if (queue.Count != 0)
+                customer.MoveTo(this.queue.ElementAt(this.queue.Count - 1));
             else
                 customer.MoveTo(this);
             this.queue.Enqueue(customer);
         }
 
-        public void Shopping()
-        {
-            if (this.queue.Count != 0 && this.queue.Peek().Status == CustomerStatus.readyToShop)
-            {
-                
-                Thread thread = new Thread(Run);
-                thread.Start();
-            }
-        }
-
-        public void Run()
+        public void Shop()
         {
             this.status = DeskStatus.busy;
             int check = 0;
@@ -118,32 +117,36 @@ namespace Praktika2023
                 check += cashier.ScanProduct(customer);
                 Thread.Sleep(cashier.Speed);
             }
+            if (customer.Age >= 60)
+            {
+                check = check - (check * 5 / 100);
+            }
             this.checks.Add(check);
             customer.MakePayment(check);
-            customer.Move(new Point(400, 0));
             this.queue.Dequeue();
+            customer.MoveTo(new Point(500, 0));
             UpdateQueue();
             this.status = DeskStatus.open;
         }
 
-            public void UpdateQueue()
+        public void UpdateQueue()
+        {
+            if (this.queue.Count == 0) return;
+            if (this.queue.Peek().Thread.IsAlive==true)
+                this.queue.Peek().Thread.Abort();
+            this.queue.Peek().MoveTo(this);
+            for (int i = 1; i < this.Queue.Count; i++)
             {
-                if (this.queue.Count == 0) return;
-                this.queue.Peek().thread.Abort();
-                this.queue.Peek().MoveTo(this);
-                for (int i = 1; i < this.Queue.Count; i++)
-                {
-                
-                    if (this.queue.ElementAt(i).thread.IsAlive == true)
-                        this.queue.ElementAt(i).thread.Abort();
-                    this.queue.ElementAt(i).MoveTo(this.queue.ElementAt(i - 1));
+                if (this.queue.ElementAt(i).Thread.IsAlive == true)
+                    this.queue.ElementAt(i).Thread.Abort();
+                this.queue.ElementAt(i).MoveTo(this.queue.ElementAt(i - 1));
             }
-            }
-        
+        }
+
 
         public override string ToString()
         {
-            string info = "Касса\n" + "Собранная сумма денег: "+ Convert.ToString(this.Income) + " руб.";
+            string info = "Касса\n" + "Собранная сумма денег: " + Convert.ToString(this.Income) + " руб.";
             return info;
         }
     }

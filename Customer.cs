@@ -12,21 +12,18 @@ namespace Praktika2023
     {
         moving,
         staying,
-        inQueue,
         readyToShop
     }
 
     internal class Customer : Person
     {
-        public Thread thread;
-        
-        public bool destChanged;
-        public bool DestChanged
+
+        private Dictionary<ProductType, int> shoppingList;
+        private List<Product> shoppingCart;
+        private Thread thread;
+        public Thread Thread
         {
-            set
-            {
-                destChanged = value;
-            }
+            get { return thread; }
         }
         private CustomerStatus status;
         public CustomerStatus Status
@@ -44,19 +41,163 @@ namespace Praktika2023
         {
             get { return cart; }
         }
-        public Customer(Point position, Size size, Color color, int minCartCount, int maxCartCount, int minCartCost, int maxCartCost) :
+        public Customer(Point position, Size size, Color color) :
             base(position, size, color)
         {
+
+            this.shoppingList = new Dictionary<ProductType, int>();
+            this.shoppingCart = new List<Product>();
+
             Random random = new Random();
-            this.money = random.Next(4700) + 300;
-            this.Id = random.Next(100) + 1;
-            cart = new ShoppingCart(money, minCartCount, maxCartCount, minCartCost, maxCartCost);
-            this.status=CustomerStatus.moving;
+            this.age = random.Next(10, 85);
+            if (this.age < 18)
+                this.money = random.Next(50, 1051);
+            else if (this.age < 60)
+                this.money = random.Next(500, 5501);
+            else
+                this.money = random.Next(200, 2201);
+            this.Id = random.Next(1, 101);
+
+            cart = new ShoppingCart(money, 5, 10, 10, 1000);
+            this.status = CustomerStatus.moving;
         }
+
         public override void Move(Point Dest)
         {
             body = new Rectangle(Dest.X, Dest.Y, body.Width, body.Height);
         }
+
+
+
+        //public async void MoveTo(Object obj)
+        //{
+        //    this.status = CustomerStatus.moving;
+        //    var cancellationTokenSource = new CancellationTokenSource();
+        //    var Token = cancellationTokenSource.Token;
+        //    if (obj.GetType() == typeof(CashDesk))
+        //    {
+        //        await Task.Run(()=>MoveToCash(obj));
+        //        //thread = new Thread(this.MoveToCash);
+        //       // thread.Start(obj);
+        //    }
+        //    if (obj.GetType() == typeof(Customer))
+        //    {
+        //        Task task = new Task(async () =>
+        //        {
+        //            Customer dest = (Customer)obj;
+        //            while ((this.body.X != dest.Body.X || this.body.Y != dest.Body.Y + dest.Body.Height + MainForm.DXY * 4 || dest.Status == CustomerStatus.moving) && this.status==CustomerStatus.moving)
+        //            {
+        //                if(this.status == CustomerStatus.staying)
+        //                    cancellationTokenSource.Cancel();
+        //                if (Token.IsCancellationRequested)
+        //                {
+        //                    return;
+        //                }
+        //                while (this.body.X != dest.Body.X && this.status == CustomerStatus.moving)
+
+        //                    {
+        //                    if (this.status == CustomerStatus.staying)
+        //                        cancellationTokenSource.Cancel();
+        //                    if (Token.IsCancellationRequested)
+        //                    {
+        //                        return;
+        //                    }
+        //                    if (this.body.X < dest.Body.X)
+        //                        this.Move(new Point(this.body.X + 1, this.body.Y));
+        //                    if (this.body.X > dest.Body.X)
+        //                        this.Move(new Point(this.Body.X - 1, this.Body.Y));
+        //                    await Task.Delay(5);
+        //                }
+        //                while (this.body.Y != dest.Body.Y + dest.Body.Height + MainForm.DXY * 4 && this.status == CustomerStatus.moving)
+
+        //                    {
+        //                    if (this.status == CustomerStatus.staying)
+        //                        cancellationTokenSource.Cancel();
+        //                    if (Token.IsCancellationRequested)
+        //                    {
+        //                        return;
+        //                    }
+        //                    if (this.body.Y < dest.Body.Y + dest.Body.Height + MainForm.DXY * 4)
+        //                        this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
+        //                    if (this.body.Y > dest.Body.Y - dest.Body.Height + MainForm.DXY * 4)
+        //                        this.Move(new Point(this.Body.X, this.Body.Y - 1));
+        //                    await Task.Delay(5);
+        //                }
+        //            }
+        //            this.status = CustomerStatus.staying;
+        //        }, Token);
+        //        task.Start();
+        //        //thread = new Thread(this.MoveToQueue);
+        //        //thread.Start(obj);
+        //    }
+        //    if (obj.GetType() == typeof(Point))
+        //    {
+        //        await Task.Run(() => MoveToPoint(obj));
+        //       // thread = new Thread(this.MoveToPoint);
+        //       // thread.Start(obj);
+        //    }
+        //}
+        //private async Task MoveToCash(Object obj)
+        //{
+
+        //    CashDesk dest = (CashDesk)obj;
+        //    while (this.body.X != dest.Form.X - this.body.Width - MainForm.DXY * 2 || this.body.Y != dest.Form.Y)
+        //    {
+        //        while (this.body.X != dest.Form.X - this.body.Width - MainForm.DXY * 2)
+        //        {
+        //            if (this.body.X < dest.Form.X - this.body.Width - MainForm.DXY * 2)
+        //                this.Move(new Point(this.body.X + 1, this.body.Y));
+        //            if (this.body.X > dest.Form.X - this.body.Width - MainForm.DXY * 2)
+        //                this.Move(new Point(this.Body.X - 1, this.Body.Y));
+        //            await Task.Delay(5);
+
+        //        }
+        //        while (this.body.Y != dest.Form.Y)
+        //        {
+        //            if (this.body.Y < dest.Form.Y)
+        //                this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
+        //            if (this.body.Y > dest.Form.Y)
+        //                this.Move(new Point(this.Body.X, this.Body.Y - 1));
+        //            await Task.Delay(5);
+        //        }
+        //    }
+        //    this.status = CustomerStatus.readyToShop;
+        //}
+        //public async void MoveToQueue(Object obj, CancellationToken Token)
+        //{
+
+
+        //}
+
+        //private async void MoveToPoint(Object obj)
+        //{
+        //    Point dest = (Point)obj;
+        //    Random random = new Random();
+        //    int destY = this.body.Y - this.body.Height - MainForm.DXY * 4;
+        //    while (this.body.Y != destY)
+        //    {
+        //        this.Move(new Point(this.body.X, this.body.Y - 1));
+        //        await Task.Delay(5);
+        //    }
+        //    int offsetX = (random.Next(-MainForm.DXY * 5, MainForm.DXY * 5 + 1));
+        //    while (this.body.X != dest.X + offsetX)
+        //    {
+        //        if (this.body.X < dest.X + offsetX)
+        //            this.Move(new Point(this.body.X + 1, this.body.Y));
+        //        if (this.body.X > dest.X + offsetX)
+        //            this.Move(new Point(this.Body.X - 1, this.Body.Y));
+        //        await Task.Delay(5);
+        //    }
+        //    while (this.body.Y != dest.Y - this.body.Height)
+        //    {
+        //        if (this.body.Y < dest.Y - this.body.Height)
+        //            this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
+        //        if (this.body.Y > dest.Y - this.body.Height)
+        //            this.Move(new Point(this.Body.X, this.Body.Y - 1));
+        //        await Task.Delay(5);
+        //    }
+        //    this.status = CustomerStatus.staying;
+        //}
 
         public void MoveTo(Object obj)
         {
@@ -71,65 +212,106 @@ namespace Praktika2023
                 thread = new Thread(this.MoveToQueue);
                 thread.Start(obj);
             }
+            if (obj.GetType() == typeof(Point))
+            {
+                thread = new Thread(this.MoveToExit);
+                thread.Start(obj);
+            }
         }
         private void MoveToCash(Object obj)
         {
-            
+
             CashDesk dest = (CashDesk)obj;
-            while (this.body.X != dest.Form.X - this.body.Width - 10)
+            while (this.body.X != dest.Form.X - this.body.Width - MainForm.DXY * 2 || this.body.Y != dest.Form.Y)
             {
-                if (MainForm.flag == false) thread.Abort();
-                if (this.body.X < dest.Form.X - this.body.Width - 10)
-                    this.Move(new Point(this.body.X + 1, this.body.Y));
-                if (this.body.X > dest.Form.X - this.body.Width - 10)
-                    this.Move(new Point(this.Body.X - 1, this.Body.Y));
-                Thread.Sleep(5);
-            }
-            while (this.body.Y != dest.Form.Y)
-            {
-                if (MainForm.flag == false) thread.Abort();
-                if (this.body.Y < dest.Form.Y)
-                    this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
-                if (this.body.Y > dest.Form.Y)
-                    this.Move(new Point(this.Body.X, this.Body.Y - 1));
-                Thread.Sleep(5);
+                while (this.body.X != dest.Form.X - this.body.Width - MainForm.DXY * 2)
+                {
+                    if (this.body.X < dest.Form.X - this.body.Width - MainForm.DXY * 2)
+                        this.Move(new Point(this.body.X + 1, this.body.Y));
+                    if (this.body.X > dest.Form.X - this.body.Width - MainForm.DXY * 2)
+                        this.Move(new Point(this.Body.X - 1, this.Body.Y));
+                    Thread.Sleep(5);
+                }
+                while (this.body.Y != dest.Form.Y)
+                {
+                    if (this.body.Y < dest.Form.Y)
+                        this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
+                    if (this.body.Y > dest.Form.Y)
+                        this.Move(new Point(this.Body.X, this.Body.Y - 1));
+                    Thread.Sleep(5);
+                }
             }
             this.status = CustomerStatus.readyToShop;
         }
         private void MoveToQueue(Object obj)
         {
-            
+
             Customer dest = (Customer)obj;
-            while (this.body.X != dest.Body.X)
+            while (this.body.X != dest.Body.X || this.body.Y != dest.Body.Y + dest.Body.Height + MainForm.DXY * 4 || dest.Status == CustomerStatus.moving)
             {
-                if (MainForm.flag == false) thread.Abort();
-                if (this.body.X < dest.Body.X)
-                    this.Move(new Point(this.body.X + 1, this.body.Y));
-                if (this.body.X > dest.Body.X)
-                    this.Move(new Point(this.Body.X - 1, this.Body.Y));
+                while (this.body.X != dest.Body.X)
+                {
+                    if (this.body.X < dest.Body.X)
+                        this.Move(new Point(this.body.X + 1, this.body.Y));
+                    if (this.body.X > dest.Body.X)
+                        this.Move(new Point(this.Body.X - 1, this.Body.Y));
+                    Thread.Sleep(5);
+                }
+                while (this.body.Y != dest.Body.Y + dest.Body.Height + MainForm.DXY * 4)
+                {
+                    if (this.body.Y < dest.Body.Y + dest.Body.Height + MainForm.DXY * 4)
+                        this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
+                    if (this.body.Y > dest.Body.Y - dest.Body.Height + MainForm.DXY * 4)
+                        this.Move(new Point(this.Body.X, this.Body.Y - 1));
+                    Thread.Sleep(5);
+                }
+            }
+            this.status = CustomerStatus.staying;
+        }
+
+        private void MoveToExit(Object obj)
+        {
+            Point dest = (Point)obj;
+            int destY = this.body.Y - this.body.Height - MainForm.DXY * 4;
+            while (this.body.Y != destY)
+            {
+                this.Move(new Point(this.body.X, this.body.Y - 1));
                 Thread.Sleep(5);
             }
-            while (this.body.Y != dest.Body.Y + dest.Body.Height+20)
+            int offsetX = (Randomizer.Rand(0,MainForm.DXY * 15));
+            if (this.body.X < dest.X-offsetX)
+                while (this.body.X != dest.X - offsetX)
+                {
+                    this.Move(new Point(this.body.X + 1, this.body.Y));
+                    Thread.Sleep(5);
+                }
+            if (this.body.X > dest.X+offsetX)
+                while (this.body.X != dest.X + offsetX)
+                {
+                    this.Move(new Point(this.body.X - 1, this.body.Y));
+                    Thread.Sleep(5);
+                }
+            while (this.body.Y != dest.Y - this.body.Height)
             {
-                if (MainForm.flag == false) thread.Abort();
-                if (this.body.Y < dest.Body.Y + dest.Body.Height + 20)
+                if (this.body.Y < dest.Y - this.body.Height)
                     this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
-                if (this.body.Y > dest.Body.Y - dest.Body.Height + 20)
+                if (this.body.Y > dest.Y - this.body.Height)
                     this.Move(new Point(this.Body.X, this.Body.Y - 1));
                 Thread.Sleep(5);
             }
-            this.status = CustomerStatus.inQueue;
+            this.status = CustomerStatus.staying;
+
         }
 
         public void MakePayment(int check)
         {
-            this.money-=check;
+            this.money -= check;
         }
 
         public override string ToString()
         {
-            string info = "Покупатель №" + Convert.ToString(this.Id) + "\nБаланс кошелька: " + Convert.ToString(this.money) +" руб."
-                + "\nКоличество товаров в корзине: " + Convert.ToString(this.cart.CountOfProducts) + "\nCуммарная стоимость: " + 
+            string info = "Покупатель №" + Convert.ToString(this.Id) + "\nВозраст: " + Convert.ToString(this.age) + "\nБаланс кошелька: " + Convert.ToString(this.money) + " руб."
+                + "\nКоличество товаров в корзине: " + Convert.ToString(this.cart.CountOfProducts) + "\nCуммарная стоимость: " +
                 Convert.ToString(this.cart.TotalCost) + " руб.";
             return info;
         }
