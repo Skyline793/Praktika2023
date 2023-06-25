@@ -12,7 +12,7 @@ namespace Praktika2023
     {
         moving,
         staying,
-        readyToShop
+        ready
     }
 
     internal class Customer : Person
@@ -161,7 +161,7 @@ namespace Praktika2023
         //            await Task.Delay(5);
         //        }
         //    }
-        //    this.status = CustomerStatus.readyToShop;
+        //    this.status = CustomerStatus.ready;
         //}
         //public async void MoveToQueue(Object obj, CancellationToken Token)
         //{
@@ -204,12 +204,12 @@ namespace Praktika2023
             this.status = CustomerStatus.moving;
             if (obj.GetType() == typeof(CashDesk))
             {
-                thread = new Thread(this.MoveToCash);
+                thread = new Thread(this.MoveToCashDesk);
                 thread.Start(obj);
             }
-            if (obj.GetType() == typeof(Customer))
+            if (obj.GetType() == typeof(ProductShelf))
             {
-                thread = new Thread(this.MoveToQueue);
+                thread = new Thread(this.MoveToShelf);
                 thread.Start(obj);
             }
             if (obj.GetType() == typeof(Point))
@@ -218,55 +218,141 @@ namespace Praktika2023
                 thread.Start(obj);
             }
         }
-        private void MoveToCash(Object obj)
+        private void MoveToCashDesk(Object obj)
         {
 
             CashDesk dest = (CashDesk)obj;
-            while (this.body.X != dest.Form.X - this.body.Width - MainForm.DXY * 2 || this.body.Y != dest.Form.Y)
+            if (dest.Queue.Peek() == this)
             {
-                while (this.body.X != dest.Form.X - this.body.Width - MainForm.DXY * 2)
+                while (this.body.X != dest.Form.X - this.body.Width - MainForm.DXY * 2 || this.body.Y != dest.Form.Y)
                 {
-                    if (this.body.X < dest.Form.X - this.body.Width - MainForm.DXY * 2)
-                        this.Move(new Point(this.body.X + 1, this.body.Y));
-                    if (this.body.X > dest.Form.X - this.body.Width - MainForm.DXY * 2)
-                        this.Move(new Point(this.Body.X - 1, this.Body.Y));
-                    Thread.Sleep(5);
+                    while (this.body.X != dest.Form.X - this.body.Width - MainForm.DXY * 2)
+                    {
+                        if (this.body.X < dest.Form.X - this.body.Width - MainForm.DXY * 2)
+                            this.Move(new Point(this.body.X + 1, this.body.Y));
+                        if (this.body.X > dest.Form.X - this.body.Width - MainForm.DXY * 2)
+                            this.Move(new Point(this.Body.X - 1, this.Body.Y));
+                        Thread.Sleep(5);
+                    }
+                    while (this.body.Y != dest.Form.Y)
+                    {
+                        if (this.body.Y < dest.Form.Y)
+                            this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
+                        if (this.body.Y > dest.Form.Y)
+                            this.Move(new Point(this.Body.X, this.Body.Y - 1));
+                        Thread.Sleep(5);
+                    }
                 }
-                while (this.body.Y != dest.Form.Y)
-                {
-                    if (this.body.Y < dest.Form.Y)
-                        this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
-                    if (this.body.Y > dest.Form.Y)
-                        this.Move(new Point(this.Body.X, this.Body.Y - 1));
-                    Thread.Sleep(5);
-                }
+                this.status = CustomerStatus.ready;
             }
-            this.status = CustomerStatus.readyToShop;
+            else
+            {
+                int ind;
+                for (ind = 0; ind < dest.Queue.Count; ind++)
+                {
+                    if (dest.Queue.ElementAt(ind).Equals(this) == true)
+                        break;
+                }
+                Customer last = dest.Queue.ElementAt(ind - 1);
+                while (this.body.X != last.Body.X || this.body.Y != last.Body.Y + last.Body.Height + MainForm.DXY * 4 || last.Status == CustomerStatus.moving)
+                {
+                    while (this.body.X != last.Body.X)
+                    {
+                        if (this.body.X < last.Body.X)
+                            this.Move(new Point(this.body.X + 1, this.body.Y));
+                        if (this.body.X > last.Body.X)
+                            this.Move(new Point(this.Body.X - 1, this.Body.Y));
+                        Thread.Sleep(5);
+                    }
+                    while (this.body.Y != last.Body.Y + last.Body.Height + MainForm.DXY * 4)
+                    {
+                        if (this.body.Y < last.Body.Y + last.Body.Height + MainForm.DXY * 4)
+                            this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
+                        if (this.body.Y > last.Body.Y - last.Body.Height + MainForm.DXY * 4)
+                            this.Move(new Point(this.Body.X, this.Body.Y - 1));
+                        Thread.Sleep(5);
+                    }
+                }
+                this.status = CustomerStatus.staying;
+            }
         }
-        private void MoveToQueue(Object obj)
+        private void MoveToShelf(Object obj)
         {
 
-            Customer dest = (Customer)obj;
-            while (this.body.X != dest.Body.X || this.body.Y != dest.Body.Y + dest.Body.Height + MainForm.DXY * 4 || dest.Status == CustomerStatus.moving)
+            ProductShelf shelf = (ProductShelf)obj;
+            bool canCollect = false;
+            int ind;
+
+            if (shelf.Queue.Count <= 2)
+                canCollect = true;
+            else if (this == shelf.Queue.ElementAt(0) || this == shelf.Queue.ElementAt(1))
+                canCollect = true;
+            for (ind = 0; ind < shelf.Queue.Count; ind++)
+                if (this == shelf.Queue.ElementAt(ind))
+                    break;
+
+            if (canCollect)
             {
-                while (this.body.X != dest.Body.X)
+                Point dest = new Point();
+                if (shelf.Slots[0] == SlotStatus.available)
                 {
-                    if (this.body.X < dest.Body.X)
-                        this.Move(new Point(this.body.X + 1, this.body.Y));
-                    if (this.body.X > dest.Body.X)
-                        this.Move(new Point(this.Body.X - 1, this.Body.Y));
-                    Thread.Sleep(5);
+                    dest = new Point(shelf.Form.Right + MainForm.DXY * 4, shelf.Form.Top + 2 * this.body.Height);
+                    shelf.Slots[0] = SlotStatus.busy;
                 }
-                while (this.body.Y != dest.Body.Y + dest.Body.Height + MainForm.DXY * 4)
+                else if (shelf.Slots[1] == SlotStatus.available)
                 {
-                    if (this.body.Y < dest.Body.Y + dest.Body.Height + MainForm.DXY * 4)
-                        this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
-                    if (this.body.Y > dest.Body.Y - dest.Body.Height + MainForm.DXY * 4)
-                        this.Move(new Point(this.Body.X, this.Body.Y - 1));
-                    Thread.Sleep(5);
+                    dest = new Point(shelf.Form.Right + MainForm.DXY * 4, shelf.Form.Bottom - 3 * this.body.Height);
+                    shelf.Slots[1] = SlotStatus.busy;
+                }
+
+                while (this.body.X != dest.X || this.body.Y != dest.Y)
+                {
+                    while (this.body.X != dest.X)
+                    {
+                        if (this.body.X < dest.X)
+                            this.Move(new Point(this.body.X + 1, this.body.Y));
+                        if (this.body.X > dest.X)
+                            this.Move(new Point(this.Body.X - 1, this.Body.Y));
+                        Thread.Sleep(5);
+                    }
+                    while (this.body.Y != dest.Y)
+                    {
+                        if (this.body.Y < dest.Y)
+                            this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
+                        if (this.body.Y > dest.Y)
+                            this.Move(new Point(this.Body.X, this.Body.Y - 1));
+                        Thread.Sleep(5);
+                    }
                 }
             }
-            this.status = CustomerStatus.staying;
+            else
+            {
+                Customer last = shelf.Queue.ElementAt(ind - 1);
+                while (this.body.X != last.Body.Right + MainForm.DXY * 4 || this.body.Y != last.Body.Y)
+                {
+                    while (this.body.X != last.Body.Right + MainForm.DXY * 4)
+                    {
+                        if (this.body.X < last.Body.Right + MainForm.DXY * 4)
+                            this.Move(new Point(this.body.X + 1, this.body.Y));
+                        if (this.body.X > last.Body.Right + MainForm.DXY * 4)
+                            this.Move(new Point(this.Body.X - 1, this.Body.Y));
+                        Thread.Sleep(5);
+                    }
+
+                    while (this.body.Y != last.Body.Top)
+                    {
+                        if (this.body.Y < last.Body.Top)
+                            this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
+                        if (this.body.Y > last.Body.Top)
+                            this.Move(new Point(this.Body.X, this.Body.Y - 1));
+                        Thread.Sleep(5);
+                    }
+                }
+            }
+            if (canCollect)
+                this.status = CustomerStatus.ready;
+            else
+                this.status = CustomerStatus.staying;
         }
 
         private void MoveToExit(Object obj)
@@ -278,14 +364,14 @@ namespace Praktika2023
                 this.Move(new Point(this.body.X, this.body.Y - 1));
                 Thread.Sleep(5);
             }
-            int offsetX = (Randomizer.Rand(0,MainForm.DXY * 15));
-            if (this.body.X < dest.X-offsetX)
+            int offsetX = (Randomizer.Rand(0, MainForm.DXY * 15));
+            if (this.body.X < dest.X - offsetX)
                 while (this.body.X != dest.X - offsetX)
                 {
                     this.Move(new Point(this.body.X + 1, this.body.Y));
                     Thread.Sleep(5);
                 }
-            if (this.body.X > dest.X+offsetX)
+            if (this.body.X > dest.X + offsetX)
                 while (this.body.X != dest.X + offsetX)
                 {
                     this.Move(new Point(this.body.X - 1, this.body.Y));

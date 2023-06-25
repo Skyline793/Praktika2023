@@ -72,9 +72,14 @@ namespace Praktika2023
                 return;
             }
             timer1.Start();
-            timer2.Interval = 1000;
+            timer2.Interval = 10000;
             timer2.Start();
             flag = true;
+            
+                new ToolTip().Show("Это касса\nКликните по ней, чтобы узнать,\n сколько в ней денег", this.pictureBox1, supermarket.Desks[0].Form.X-MainForm.DXY*5, supermarket.Desks[0].Form.Bottom, 10000);
+                new ToolTip().Show("Это кассир\nКликните, чтобы узнать\nскорость сканирования", this.pictureBox1, supermarket.Cashiers[0].Body.Right, supermarket.Cashiers[0].Body.Top-MainForm.DXY*4, 10000);
+                new ToolTip().Show("Это полка с товарами\nКликните по ней, чтобы узнать,\nсколько в ней товаров", this.pictureBox1, supermarket.Shelves[0].Form.X, supermarket.Shelves[0].Form.Top, 10000);
+            new ToolTip().Show("Это вход. Отсюда заходят покупатели\nКликните на покупателя, чтобы узнать\nего возраст, список покупок и баланс", this.pictureBox1, this.entrance.X, this.entrance.Top-MainForm.DXY*15, 10000);
         }
 
         private void DrawObjects(Graphics g)
@@ -88,7 +93,7 @@ namespace Praktika2023
             foreach(ProductShelf shelf in supermarket.Shelves)
                 g.FillRectangle(new SolidBrush(shelf.Color), shelf.Form);
             g.FillPie(new SolidBrush(Color.Brown), entrance, 180, 180);
-            g.DrawString("ЗОНА КАСС", new Font("Arial", 14), new SolidBrush(Color.Black), this.pictureBox1.Width / 2 - 65, this.pictureBox1.Height - 30);
+            g.DrawString("ВХОД", new Font("Arial", 14), new SolidBrush(Color.Black), this.pictureBox1.Width / 2 - 40, this.pictureBox1.Height - 30);
            g.FillPie(new SolidBrush(Color.Brown), exit, 0, 180);
             g.DrawString("ВЫХОД", new Font("Arial", 14), new SolidBrush(Color.Black), this.pictureBox1.Width / 2 - 45, 15);
         }
@@ -102,11 +107,11 @@ namespace Praktika2023
                 if (customer.Thread!=null && customer.Thread.IsAlive)
                     customer.Thread.Abort();
             }
-            foreach(CashDesk desk in supermarket.Desks)
-            {
-                if(desk.Thread!= null && desk.Thread.IsAlive)
-                    desk.Thread.Abort();
-            }
+            //foreach(CashDesk desk in supermarket.Desks)
+            //{
+            //    if(desk.Thread!= null && desk.Thread.IsAlive)
+            //        desk.Thread.Abort();
+            //}
             flag = false;
             supermarket = null;
             this.pictureBox1.Invalidate();

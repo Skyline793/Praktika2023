@@ -89,6 +89,13 @@ namespace Praktika2023
         {
             Customer newCustomer = new Customer(new Point(sceneSize.Width / 2, sceneSize.Height - MainForm.DXY * 10), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Green);
             customers.Add(newCustomer);
+            shelves[0].AddCustomerToQueue(newCustomer);
+            //SendCustomerToCashDesk(newCustomer);
+            
+        }
+
+        public void SendCustomerToCashDesk(Customer customer)
+        {
             int min = 100; int max = -1;
             for (int i = 0; i < desks.Count; i++)
             {
@@ -105,14 +112,14 @@ namespace Praktika2023
             {
                 Random rand = new Random();
                 int ind = rand.Next(this.desks.Count);
-                this.desks[ind].AddCustomerToQueue(newCustomer);
+                this.desks[ind].AddCustomerToQueue(customer);
             }
             else
             {
                 for (int i = 0; i < desks.Count; i++)
                     if (min == desks[i].CountOfCustomers)
                     {
-                        this.desks[i].AddCustomerToQueue(newCustomer);
+                        this.desks[i].AddCustomerToQueue(customer);
                         break;
                     }
             }
@@ -122,7 +129,7 @@ namespace Praktika2023
         {
             foreach (CashDesk desk in this.desks)
             {
-                if (desk.Status == DeskStatus.open && desk.Queue.Count != 0 && desk.Queue.Peek().Status == CustomerStatus.readyToShop)
+                if (desk.Status == DeskStatus.open && desk.Queue.Count != 0 && desk.Queue.Peek().Status == CustomerStatus.ready)
                 {
                     desk.Status = DeskStatus.busy;
                     int check = 0;
@@ -167,6 +174,33 @@ namespace Praktika2023
                     //  });
                     task.Start();
 
+                }
+            }
+        }
+
+        public void PickingUps()
+        {
+            foreach(ProductShelf shelf in this.Shelves)
+            {
+                List<Customer> customers = new List<Customer>();
+                if(shelf.Queue.Count!=0 && (shelf.Slots[0]==SlotStatus.available || shelf.Slots[1]==SlotStatus.available))
+                {
+                    if(shelf.Slots[0]==SlotStatus.busy)
+                        customers.Add(shelf.Queue.Peek());
+                    if (shelf.Slots[1]==SlotStatus.busy)
+                        customers.Add(shelf.Queue.ElementAt(1));
+                    foreach(Customer customer in customers)
+                    {
+                        if(customer.Status==CustomerStatus.ready)
+                        {
+                            Task task = new Task(async () =>
+                            {
+                                await Task.Delay(5000);
+                                
+                            });
+                            task.Start();
+                        }
+                    }
                 }
             }
         }

@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace Praktika2023
 {
+    enum SlotStatus
+    {
+        available,
+        busy
+    }
+
     internal class ProductShelf
     {
         private Color color;
@@ -22,14 +28,25 @@ namespace Praktika2023
         }
         private List<Product> foodShelf;
         private List<Product> goodsShelf;
-        private Queue<Customer> customers;
+        private Queue<Customer> queue;
+        public Queue<Customer> Queue
+        {
+            get { return queue; }
+        }
+        private List<SlotStatus> slots;
+        public List<SlotStatus> Slots
+        {
+            get { return slots; }
+        }
+
+
 
         public ProductShelf(Point position, Size size, Color color, int foodCount, int goodsCount)
         {
             this.form = new Rectangle(position, size);
             this.color = color;
             foodShelf = new List<Product>();
-            for (int i = 0; i < foodCount/2; i++)
+            for (int i = 0; i < foodCount / 2; i++)
             {
                 foodShelf.Add(new Product(ProductType.food, PriceSegment.low));
             }
@@ -37,7 +54,7 @@ namespace Praktika2023
             {
                 foodShelf.Add(new Product(ProductType.food, PriceSegment.medium));
             }
-            while(foodShelf.Count<foodCount)
+            while (foodShelf.Count < foodCount)
             {
                 foodShelf.Add(new Product(ProductType.food, PriceSegment.premium));
             }
@@ -55,7 +72,15 @@ namespace Praktika2023
             {
                 goodsShelf.Add(new Product(ProductType.goods, PriceSegment.premium));
             }
-            customers = new Queue<Customer>();
+            this.queue = new Queue<Customer>();
+            this.slots = new List<SlotStatus>(2) { SlotStatus.available, SlotStatus.available };
+        }
+
+        public void AddCustomerToQueue(Customer customer)
+        {
+            this.queue.Enqueue(customer);
+                customer.MoveTo(this); 
+            
         }
 
     }
