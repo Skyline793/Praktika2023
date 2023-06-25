@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -78,9 +79,9 @@ namespace Praktika2023
             for(int i = 0; i < countOfShelves; i++)
             {
                 if(i==0)
-                    shelves.Add(new ProductShelf(new Point(0, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 40), Color.Brown, 1000, 1000));
+                    shelves.Add(new ProductShelf(new Point(0, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 40), Color.Brown,1, 1000, 1000));
                 if (i == 1)
-                    shelves.Add(new ProductShelf(new Point(sizeOfScene.Width-MainForm.DXY*10, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 40), Color.Brown, 1000, 1000));
+                    shelves.Add(new ProductShelf(new Point(sizeOfScene.Width-MainForm.DXY*10, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 40), Color.Brown,2, 1000, 1000));
             }
             customers = new List<Customer>();
         }
@@ -89,15 +90,16 @@ namespace Praktika2023
         {
             Customer newCustomer = new Customer(new Point(sceneSize.Width / 2, sceneSize.Height - MainForm.DXY * 10), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Green);
             customers.Add(newCustomer);
-            shelves[0].AddCustomerToQueue(newCustomer);
-            //SendCustomerToCashDesk(newCustomer);
+
+            shelves[Randomizer.Rand(0, shelves.Count-1)].AddCustomerToQueue(newCustomer);
             
         }
 
         public void SendCustomerToCashDesk(Customer customer)
         {
-            int min = 100; int max = -1;
-            for (int i = 0; i < desks.Count; i++)
+            int min = desks[0].CountOfCustomers;
+            int max = desks[0].CountOfCustomers;
+            for (int i = 1; i < desks.Count; i++)
             {
                 if (desks[i].CountOfCustomers < min)
                     min = desks[i].CountOfCustomers;
@@ -129,7 +131,7 @@ namespace Praktika2023
         {
             foreach (CashDesk desk in this.desks)
             {
-                if (desk.Status == DeskStatus.open && desk.Queue.Count != 0 && desk.Queue.Peek().Status == CustomerStatus.ready)
+                if (desk.Status == DeskStatus.open && desk.Queue.Count != 0 && desk.Queue.Peek().Status == CustomerStatus.readyToPay)
                 {
                     desk.Status = DeskStatus.busy;
                     int check = 0;
@@ -139,8 +141,8 @@ namespace Praktika2023
 
                         for (int i = 0; i < customer.Cart.CountOfProducts; i++)
                         {
-                            check += desk.Cashier.ScanProduct(customer);
                             await Task.Delay(desk.Cashier.Speed);
+                            check += desk.Cashier.ScanProduct(customer);
                         }
                         if (customer.Age >= 60)
                         {
@@ -153,54 +155,36 @@ namespace Praktika2023
                         desk.UpdateQueue();
                         desk.Status = DeskStatus.open;
                     });
-                    //Thread thread = new Thread(() =>
-                    //  {
-
-                    //      for (int i = 0; i < customer.Cart.CountOfProducts; i++)
-                    //      {
-                    //          check += desk.Cashier.ScanProduct(customer);
-                    //          Thread.Sleep(desk.Cashier.Speed);
-                    //      }
-                    //      if (customer.Age >= 60)
-                    //      {
-                    //          check = check - (check * 5 / 100);
-                    //      }
-                    //      desk.Checks.Add(check);
-                    //      customer.MakePayment(check);
-                    //      desk.Queue.Dequeue();
-                    //      customer.MoveTo(new Point(this.sceneSize.Width/2, 0));
-                    //      desk.UpdateQueue();
-                    //      desk.Status = DeskStatus.open;
-                    //  });
                     task.Start();
 
                 }
             }
         }
-
-        public void PickingUps()
+        
+        public void PickingUp()
         {
             foreach(ProductShelf shelf in this.Shelves)
             {
-                List<Customer> customers = new List<Customer>();
-                if(shelf.Queue.Count!=0 && (shelf.Slots[0]==SlotStatus.available || shelf.Slots[1]==SlotStatus.available))
+                if(shelf.Queue.Count!=0 && shelf.Queue.Peek().Status==CustomerStatus.readyToPickUp)
                 {
-                    if(shelf.Slots[0]==SlotStatus.busy)
-                        customers.Add(shelf.Queue.Peek());
-                    if (shelf.Slots[1]==SlotStatus.busy)
-                        customers.Add(shelf.Queue.ElementAt(1));
-                    foreach(Customer customer in customers)
+                    Customer customer = shelf.Queue.Peek();
+                    customer.Status = CustomerStatus.staying;
+                    Task task = new Task(async () =>
                     {
-                        if(customer.Status==CustomerStatus.ready)
+                        customer.Cart = new ShoppingCart(customer.Money, 1, 10, 1, 100);
+                        for(int i=0; i<customer.Cart.CountOfProducts; i++)
+                            await Task.Delay(1000);
+                        shelf.Queue.Dequeue();
+                        this.SendCustomerToCashDesk(customer);
+                        for (int i = 0; i < shelf.Queue.Count; i++)
                         {
-                            Task task = new Task(async () =>
-                            {
-                                await Task.Delay(5000);
-                                
-                            });
-                            task.Start();
+                            if (shelf.Queue.ElementAt(i).Thread.IsAlive == true)
+                                shelf.Queue.ElementAt(i).Thread.Abort();
+                            shelf.Queue.ElementAt(i).MoveTo(shelf);
                         }
-                    }
+
+                    });
+                    task.Start();
                 }
             }
         }

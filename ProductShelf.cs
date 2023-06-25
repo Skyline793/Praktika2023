@@ -8,11 +8,6 @@ using System.Threading.Tasks;
 
 namespace Praktika2023
 {
-    enum SlotStatus
-    {
-        available,
-        busy
-    }
 
     internal class ProductShelf
     {
@@ -33,15 +28,13 @@ namespace Praktika2023
         {
             get { return queue; }
         }
-        private List<SlotStatus> slots;
-        public List<SlotStatus> Slots
+        private int directionOfApproach;
+        public int DirectionOfApproach
         {
-            get { return slots; }
+            get { return directionOfApproach; }
         }
 
-
-
-        public ProductShelf(Point position, Size size, Color color, int foodCount, int goodsCount)
+        public ProductShelf(Point position, Size size, Color color, int direction, int foodCount, int goodsCount)
         {
             this.form = new Rectangle(position, size);
             this.color = color;
@@ -73,7 +66,7 @@ namespace Praktika2023
                 goodsShelf.Add(new Product(ProductType.goods, PriceSegment.premium));
             }
             this.queue = new Queue<Customer>();
-            this.slots = new List<SlotStatus>(2) { SlotStatus.available, SlotStatus.available };
+            this.directionOfApproach = direction;
         }
 
         public void AddCustomerToQueue(Customer customer)

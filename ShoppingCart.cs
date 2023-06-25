@@ -30,7 +30,7 @@ namespace Praktika2023
             shoppingList = new Stack<int>();
             
             Random random = new Random();
-            this.countOfProducts = random.Next(maxCount-minCost) + minCount;
+            this.countOfProducts = random.Next(maxCount - minCost) + minCount;
             do
             {
                 totalCost = 0;
@@ -39,9 +39,9 @@ namespace Praktika2023
                     shoppingList.Push(random.Next(maxCost - minCost) + minCost);
                     totalCost += shoppingList.Peek();
                 }
-                if(totalCost > maxTotalCost) shoppingList.Clear();
-            } while(totalCost >=maxTotalCost);
-            
+                if (totalCost > maxTotalCost) shoppingList.Clear();
+            } while (totalCost >= maxTotalCost);
+
         }
     }
 }

@@ -21,7 +21,6 @@ namespace Praktika2023
 
         public int ScanProduct(Customer customer)
         {
-            customer.Cart.CountOfProducts--;
             return customer.Cart.ShoppingList.Pop();
 
         }

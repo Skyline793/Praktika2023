@@ -49,7 +49,6 @@
     <Compile Include="CashDesk.cs" />
     <Compile Include="Cashier.cs" />
     <Compile Include="Customer.cs" />
-    <Compile Include="CustomersQueue.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -40,10 +40,8 @@ namespace Praktika2023
         {
 
             this.pictureBox1.Invalidate();
+            this.supermarket.PickingUp();
             this.supermarket.Shoppings();
-            //foreach (CashDesk desk in supermarket.Desks)
-            //    if (desk.Status == DeskStatus.open)
-            //        desk.Shopping();
         }
 
         private void timer2_Tick(object sender, EventArgs e)
@@ -59,18 +57,10 @@ namespace Praktika2023
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            numOfCashDesks = 3;
-            cashiersSpeed = 2000;
+            numOfCashDesks = 0;
+            cashiersSpeed = 3000;
             numOfShelves = 2;
-            try
-            {
-                supermarket = new Supermarket(numOfCashDesks, numOfShelves, cashiersSpeed, pictureBox1.Size);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
-            }
+            supermarket = new Supermarket(numOfCashDesks, numOfShelves, cashiersSpeed, pictureBox1.Size);
             timer1.Start();
             timer2.Interval = 10000;
             timer2.Start();
@@ -78,7 +68,7 @@ namespace Praktika2023
             
                 new ToolTip().Show("Это касса\nКликните по ней, чтобы узнать,\n сколько в ней денег", this.pictureBox1, supermarket.Desks[0].Form.X-MainForm.DXY*5, supermarket.Desks[0].Form.Bottom, 10000);
                 new ToolTip().Show("Это кассир\nКликните, чтобы узнать\nскорость сканирования", this.pictureBox1, supermarket.Cashiers[0].Body.Right, supermarket.Cashiers[0].Body.Top-MainForm.DXY*4, 10000);
-                new ToolTip().Show("Это полка с товарами\nКликните по ней, чтобы узнать,\nсколько в ней товаров", this.pictureBox1, supermarket.Shelves[0].Form.X, supermarket.Shelves[0].Form.Top, 10000);
+                new ToolTip().Show("Это полка с товарами\nКликните по ней, чтобы узнать,\nсколько в ней товаров", this.pictureBox1, supermarket.Shelves[0].Form.Right, supermarket.Shelves[0].Form.Top, 10000);
             new ToolTip().Show("Это вход. Отсюда заходят покупатели\nКликните на покупателя, чтобы узнать\nего возраст, список покупок и баланс", this.pictureBox1, this.entrance.X, this.entrance.Top-MainForm.DXY*15, 10000);
         }
 
