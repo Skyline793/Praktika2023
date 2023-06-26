@@ -19,7 +19,18 @@ namespace Praktika2023
 
     internal class CashDesk
     {
-        private int averageCheck;
+        private int deskAverageCheck;
+        public int DeskAverageCheck
+        {
+            get
+            {
+                if (checks.Count != 0)
+                    deskAverageCheck = checks.Sum() / checks.Count;
+                else
+                    deskAverageCheck = 0;
+                return deskAverageCheck;
+            }
+        }
         private List<int> checks;
         public List<int> Checks
         {
@@ -118,7 +129,7 @@ namespace Praktika2023
 
         public override string ToString()
         {
-            string info = "Касса\n" + "Собранная сумма денег: " + Convert.ToString(this.Income) + " руб.";
+            string info = String.Format("Касса\nПокупателей обслужено: {0}\nТекущий доход: {1} руб.", Convert.ToString(this.checks.Count), Convert.ToString(this.Income));
             return info;
         }
     }

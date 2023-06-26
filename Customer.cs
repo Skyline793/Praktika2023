@@ -91,8 +91,6 @@ namespace Praktika2023
             }
             if (obj.GetType() == typeof(Point))
             {
-                //this.status = CustomerStatus.exited;
-                // Move(new Point(500, -20));
                 thread = new Thread(this.MoveToExit);
                 thread.Start(obj);
             }
@@ -281,8 +279,7 @@ namespace Praktika2023
 
         public override string ToString()
         {
-            string info = "Покупатель №" + Convert.ToString(this.Id) + "\nВозраст: " + Convert.ToString(this.age) + "\nБаланс кошелька: " + Convert.ToString(this.money) + " руб."
-                + "\nКоличество товаров в корзине: " + "\nCуммарная стоимость: " + " руб.";
+            string info = String.Format("Покупатель №{0}\nВозраст: {1}\nБаланс кошелька: {2} руб.", Convert.ToString(this.Id), Convert.ToString(this.age), Convert.ToString(this.money));
             return info;
         }
     }

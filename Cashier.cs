@@ -17,6 +17,7 @@ namespace Praktika2023
         public Cashier(Point position, Size size, Color color, int scanSpeed, int ID): base(position, size, color, ID)
         {
             this.scanSpeed = scanSpeed;
+            this.age = Randomizer.Rand(18, 60);
         }
 
         public int ScanProduct(Customer customer)
@@ -28,6 +29,13 @@ namespace Praktika2023
         public override void Move(Point Dest)
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            string info = String.Format("Кассир №{0}\nВозраст: {1}\nСкорость сканирования: {2} секунд(-ы) на товар",
+                Convert.ToString(this.Id), Convert.ToString(this.age), Convert.ToString(this.scanSpeed/1000.0));
+            return info;
         }
     }
 }

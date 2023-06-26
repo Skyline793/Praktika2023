@@ -22,10 +22,26 @@ namespace Praktika2023
                 totalIncome = 0;
                 foreach (CashDesk desk in desks)
                     totalIncome += desk.Income;
-                return TotalIncome;
+                return totalIncome;
             }
         }
-        private int countOfCustomers { get; set; }
+        private int averageCheck;
+        public int AverageCheck
+        {
+            get
+            {
+                averageCheck = 0;
+                foreach (CashDesk desk in desks)
+                    averageCheck += desk.DeskAverageCheck;
+                averageCheck /= desks.Count;
+                return averageCheck;
+            }
+        }
+        private int countOfCustomers;
+        public int CountOfCustomers
+        {
+            get { return countOfCustomers; }
+        }
         private List<Customer> customers;
         public List<Customer> Customers
         {

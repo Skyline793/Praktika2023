@@ -86,5 +86,11 @@ namespace Praktika2023
             }
         }
 
+        public override string ToString()
+        {
+            string info = String.Format("Продуктовая полка\nЗапас съедобных товаров: {0} шт.\nЗапас несъедобных товаров: {1} шт.", Convert.ToString(this.foodShelf.Count), Convert.ToString(this.goodsShelf.Count));
+            return info;
+        }
+
     }
 }
