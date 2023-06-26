@@ -25,6 +25,7 @@ namespace Praktika2023
                 return TotalIncome;
             }
         }
+        private int countOfCustomers { get; set; }
         private List<Customer> customers;
         public List<Customer> Customers
         {
@@ -59,40 +60,50 @@ namespace Praktika2023
                 {
 
                     desks.Add(new CashDesk(new Point(sceneSize.Width / 5, MainForm.DXY * 20), new Size(MainForm.DXY * 8, MainForm.DXY * 12), Color.Gray));
-                    cashiers.Add(new Cashier(new Point(desks[i].Form.Right + MainForm.DXY * 2, desks[i].Form.Top + desks[i].Form.Size.Height / MainForm.DXY), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Blue, cashierSpeed));
+                    cashiers.Add(new Cashier(new Point(desks[i].Form.Right + MainForm.DXY * 2, desks[i].Form.Top + desks[i].Form.Size.Height / MainForm.DXY), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Blue, cashierSpeed, 1));
                     desks[i].Cashier = cashiers[i];
                 }
                 if (i == 1)
                 {
                     desks.Add(new CashDesk(new Point(sceneSize.Width / 2, MainForm.DXY * 20), new Size(MainForm.DXY * 8, MainForm.DXY * 12), Color.Gray));
-                    cashiers.Add(new Cashier(new Point(desks[i].Form.Right + MainForm.DXY * 2, desks[i].Form.Top + desks[i].Form.Size.Height / MainForm.DXY), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Blue, cashierSpeed));
+                    cashiers.Add(new Cashier(new Point(desks[i].Form.Right + MainForm.DXY * 2, desks[i].Form.Top + desks[i].Form.Size.Height / MainForm.DXY), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Blue, cashierSpeed, 1));
                     desks[i].Cashier = cashiers[i];
                 }
                 if (i == 2)
                 {
                     desks.Add(new CashDesk(new Point(sceneSize.Width - sceneSize.Width / 5, MainForm.DXY * 20), new Size(MainForm.DXY * 8, MainForm.DXY * 12), Color.Gray));
-                    cashiers.Add(new Cashier(new Point(desks[i].Form.Right + MainForm.DXY * 2, desks[i].Form.Top + desks[i].Form.Size.Height / MainForm.DXY), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Blue, cashierSpeed));
+                    cashiers.Add(new Cashier(new Point(desks[i].Form.Right + MainForm.DXY * 2, desks[i].Form.Top + desks[i].Form.Size.Height / MainForm.DXY), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Blue, cashierSpeed, 1));
                     desks[i].Cashier = cashiers[i];
                 }
             }
             shelves = new List<ProductShelf>();
-            for(int i = 0; i < countOfShelves; i++)
+            for (int i = 0; i < countOfShelves; i++)
             {
-                if(i==0)
-                    shelves.Add(new ProductShelf(new Point(0, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 40), Color.Brown,1, 1000, 1000));
+                if (i == 0)
+                    shelves.Add(new ProductShelf(new Point(0, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 30), Color.Brown, 1, 1000, 1000));
                 if (i == 1)
-                    shelves.Add(new ProductShelf(new Point(sizeOfScene.Width-MainForm.DXY*10, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 40), Color.Brown,2, 1000, 1000));
+                    shelves.Add(new ProductShelf(new Point(sizeOfScene.Width - MainForm.DXY * 10, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 30), Color.Brown, 2, 1000, 1000));
             }
             customers = new List<Customer>();
+            this.countOfCustomers = 0;
         }
 
         public void AddCustomer()
         {
-            Customer newCustomer = new Customer(new Point(sceneSize.Width / 2, sceneSize.Height - MainForm.DXY * 10), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Green);
+            Customer newCustomer = new Customer(new Point(sceneSize.Width / 2, sceneSize.Height - MainForm.DXY * 10), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Green, ++countOfCustomers);
             customers.Add(newCustomer);
+            if (shelves.Count == 1)
+                shelves[0].AddCustomerToQueue(newCustomer);
+            else
+            {
+                if (shelves[0].Queue.Count < shelves[1].Queue.Count)
+                    shelves[0].AddCustomerToQueue(newCustomer);
+                else if (shelves[0].Queue.Count > shelves[1].Queue.Count)
+                    shelves[1].AddCustomerToQueue(newCustomer);
+                else
+                    shelves[Randomizer.Rand(0, 1)].AddCustomerToQueue(newCustomer);
+            }
 
-            shelves[Randomizer.Rand(0, shelves.Count-1)].AddCustomerToQueue(newCustomer);
-            
         }
 
         public void SendCustomerToCashDesk(Customer customer)
@@ -112,8 +123,16 @@ namespace Praktika2023
             }
             else if (min == max)
             {
-                Random rand = new Random();
-                int ind = rand.Next(this.desks.Count);
+                int ind = 0;
+                int distance = Math.Abs(customer.Body.X - desks[0].Form.X);
+                for (int i = 1; i < desks.Count; i++)
+                {
+                    if (Math.Abs(customer.Body.X - desks[i].Form.X) < distance)
+                    {
+                        distance = Math.Abs(customer.Body.X - desks[i].Form.X);
+                        ind = i;
+                    }
+                }
                 this.desks[ind].AddCustomerToQueue(customer);
             }
             else
@@ -141,7 +160,7 @@ namespace Praktika2023
 
                         for (int i = 0; i < customer.Cart.CountOfProducts; i++)
                         {
-                            await Task.Delay(desk.Cashier.Speed);
+                            await Task.Delay(desk.Cashier.ScanSpeed);
                             check += desk.Cashier.ScanProduct(customer);
                         }
                         if (customer.Age >= 60)
@@ -151,8 +170,11 @@ namespace Praktika2023
                         desk.Checks.Add(check);
                         customer.MakePayment(check);
                         desk.Queue.Dequeue();
-                        customer.MoveTo(new Point(this.sceneSize.Width / 2, 0));
-                        desk.UpdateQueue();
+                        if (MainForm.simulation)
+                        {
+                            customer.MoveTo(new Point(this.sceneSize.Width / 2, 0));
+                            desk.UpdateQueue();
+                        }
                         desk.Status = DeskStatus.open;
                     });
                     task.Start();
@@ -160,29 +182,26 @@ namespace Praktika2023
                 }
             }
         }
-        
+
         public void PickingUp()
         {
-            foreach(ProductShelf shelf in this.Shelves)
+            foreach (ProductShelf shelf in this.Shelves)
             {
-                if(shelf.Queue.Count!=0 && shelf.Queue.Peek().Status==CustomerStatus.readyToPickUp)
+                if (shelf.Queue.Count != 0 && shelf.Queue.Peek().Status == CustomerStatus.readyToPickUp)
                 {
                     Customer customer = shelf.Queue.Peek();
                     customer.Status = CustomerStatus.staying;
                     Task task = new Task(async () =>
                     {
                         customer.Cart = new ShoppingCart(customer.Money, 1, 10, 1, 100);
-                        for(int i=0; i<customer.Cart.CountOfProducts; i++)
+                        for (int i = 0; i < customer.Cart.CountOfProducts; i++)
                             await Task.Delay(1000);
                         shelf.Queue.Dequeue();
-                        this.SendCustomerToCashDesk(customer);
-                        for (int i = 0; i < shelf.Queue.Count; i++)
+                        if (MainForm.simulation)
                         {
-                            if (shelf.Queue.ElementAt(i).Thread.IsAlive == true)
-                                shelf.Queue.ElementAt(i).Thread.Abort();
-                            shelf.Queue.ElementAt(i).MoveTo(shelf);
+                            this.SendCustomerToCashDesk(customer);
+                            shelf.UpdateQueue();
                         }
-
                     });
                     task.Start();
                 }

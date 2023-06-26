@@ -25,10 +25,11 @@ namespace Praktika2023
         {
             get { return color; }
         }
-        public Person(Point position, Size size, Color color)
+        public Person(Point position, Size size, Color color, int ID)
         {
             this.color = color;
             this.body = new Rectangle(position.X, position.Y, size.Width, size.Height);
+            this.Id = ID;
         }
         abstract public void Move(Point Dest);
 

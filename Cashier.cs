@@ -9,14 +9,14 @@ namespace Praktika2023
 {
     internal class Cashier : Person
     {
-        private int speed;
-        public int Speed
+        private int scanSpeed;
+        public int ScanSpeed
         {
-            get { return speed; }
+            get { return scanSpeed; }
         }
-        public Cashier(Point position, Size size, Color color, int Speed): base(position, size, color)
+        public Cashier(Point position, Size size, Color color, int scanSpeed, int ID): base(position, size, color, ID)
         {
-            this.speed = Speed;
+            this.scanSpeed = scanSpeed;
         }
 
         public int ScanProduct(Customer customer)

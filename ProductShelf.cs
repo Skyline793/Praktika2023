@@ -76,5 +76,15 @@ namespace Praktika2023
             
         }
 
+        public void UpdateQueue()
+        {
+            for (int i = 0; i < this.Queue.Count; i++)
+            {
+                if (this.Queue.ElementAt(i).Thread.IsAlive == true)
+                    this.Queue.ElementAt(i).Thread.Abort();
+                this.Queue.ElementAt(i).MoveTo(this);
+            }
+        }
+
     }
 }

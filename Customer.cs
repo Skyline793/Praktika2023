@@ -13,12 +13,13 @@ namespace Praktika2023
         moving,
         staying,
         readyToPay,
-        readyToPickUp
+        readyToPickUp,
+        exited
     }
 
     internal class Customer : Person
     {
-
+        private int speed;
         private Dictionary<ProductType, int> shoppingList;
         private List<Product> shoppingCart;
         private Thread thread;
@@ -43,23 +44,29 @@ namespace Praktika2023
             get { return cart; }
             set { cart = value; }
         }
-        public Customer(Point position, Size size, Color color) :
-            base(position, size, color)
+        public Customer(Point position, Size size, Color color, int ID) :
+            base(position, size, color, ID)
         {
 
             this.shoppingList = new Dictionary<ProductType, int>();
             this.shoppingCart = new List<Product>();
 
-
-            Random random = new Random();
-            this.age = random.Next(10, 85);
+            this.age = Randomizer.Rand(10, 85);
             if (this.age < 18)
-                this.money = random.Next(50, 1051);
+            {
+                this.money = Randomizer.Rand(50, 1000);
+                this.speed = 5;
+            }
             else if (this.age < 60)
-                this.money = random.Next(500, 5501);
+            {
+                this.money = Randomizer.Rand(500, 5000);
+                this.speed = 10;
+            }
             else
-                this.money = random.Next(200, 2201);
-            this.Id = random.Next(1, 101);
+            {
+                this.money = Randomizer.Rand(200, 2000);
+                this.speed = 15;
+            }
 
             this.status = CustomerStatus.staying;
         }
@@ -84,17 +91,19 @@ namespace Praktika2023
             }
             if (obj.GetType() == typeof(Point))
             {
+                //this.status = CustomerStatus.exited;
+                // Move(new Point(500, -20));
                 thread = new Thread(this.MoveToExit);
                 thread.Start(obj);
             }
         }
-        
+
         private void MoveToCashDesk(Object obj)
         {
 
             CashDesk dest = (CashDesk)obj;
             if (dest.Queue.Peek() == this)
-            { 
+            {
 
                 while (this.body.X != dest.Form.X - this.body.Width - MainForm.DXY * 2 || this.body.Y != dest.Form.Y)
                 {
@@ -104,15 +113,15 @@ namespace Praktika2023
                             this.Move(new Point(this.body.X + 1, this.body.Y));
                         if (this.body.X > dest.Form.X - this.body.Width - MainForm.DXY * 2)
                             this.Move(new Point(this.Body.X - 1, this.Body.Y));
-                        Thread.Sleep(5);
+                        Thread.Sleep(this.speed);
                     }
                     while (this.body.Y != dest.Form.Y)
                     {
                         if (this.body.Y < dest.Form.Y)
-                            this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
+                            this.Move(new Point(this.Body.X, this.Body.Y + 1));
                         if (this.body.Y > dest.Form.Y)
                             this.Move(new Point(this.Body.X, this.Body.Y - 1));
-                        Thread.Sleep(5);
+                        Thread.Sleep(this.speed);
                     }
                 }
                 this.status = CustomerStatus.readyToPay;
@@ -126,7 +135,7 @@ namespace Praktika2023
                         break;
                 }
                 Customer last = dest.Queue.ElementAt(ind - 1);
-                while (this.body.X != last.Body.X || this.body.Y != last.Body.Y + last.Body.Height + MainForm.DXY * 4 || last.Status == CustomerStatus.moving)
+                while (this.body.X != last.Body.X || this.body.Y != last.Body.Bottom + MainForm.DXY * 4 || last.Status == CustomerStatus.moving)
                 {
                     while (this.body.X != last.Body.X)
                     {
@@ -134,15 +143,15 @@ namespace Praktika2023
                             this.Move(new Point(this.body.X + 1, this.body.Y));
                         if (this.body.X > last.Body.X)
                             this.Move(new Point(this.Body.X - 1, this.Body.Y));
-                        Thread.Sleep(5);
+                        Thread.Sleep(this.speed);
                     }
-                    while (this.body.Y != last.Body.Y + last.Body.Height + MainForm.DXY * 4)
+                    while (this.body.Y != last.Body.Bottom + MainForm.DXY * 4)
                     {
-                        if (this.body.Y < last.Body.Y + last.Body.Height + MainForm.DXY * 4)
-                            this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
-                        if (this.body.Y > last.Body.Y - last.Body.Height + MainForm.DXY * 4)
+                        if (this.body.Y < last.Body.Bottom + MainForm.DXY * 4)
+                            this.Move(new Point(this.Body.X, this.Body.Y + 1));
+                        if (this.body.Y > last.Body.Bottom + MainForm.DXY * 4)
                             this.Move(new Point(this.Body.X, this.Body.Y - 1));
-                        Thread.Sleep(5);
+                        Thread.Sleep(this.speed);
                     }
                 }
                 this.status = CustomerStatus.staying;
@@ -155,7 +164,7 @@ namespace Praktika2023
             bool canCollect = false;
             int ind;
 
-            if (shelf.Queue.Count ==0)
+            if (shelf.Queue.Count == 0)
                 canCollect = true;
             else if (this == shelf.Queue.Peek())
                 canCollect = true;
@@ -166,16 +175,6 @@ namespace Praktika2023
             if (canCollect)
             {
                 Point dest = new Point();
-                //if (shelf.Slots[0] == SlotStatus.available)
-                //{
-
-                //    shelf.Slots[0] = SlotStatus.busy;
-                //}
-                //else if (shelf.Slots[1] == SlotStatus.available)
-                //{
-                //    dest = new Point(shelf.Form.Right + MainForm.DXY * 4, shelf.Form.Bottom - 3 * this.body.Height);
-                //    shelf.Slots[1] = SlotStatus.busy;
-                //}
                 if (shelf.DirectionOfApproach == 1)
                     dest = new Point(shelf.Form.Right + MainForm.DXY * 4, shelf.Form.Top + 3 * this.body.Height);
                 else if (shelf.DirectionOfApproach == 2)
@@ -189,15 +188,15 @@ namespace Praktika2023
                             this.Move(new Point(this.body.X + 1, this.body.Y));
                         if (this.body.X > dest.X)
                             this.Move(new Point(this.Body.X - 1, this.Body.Y));
-                        Thread.Sleep(5);
+                        Thread.Sleep(this.speed);
                     }
                     while (this.body.Y != dest.Y)
                     {
                         if (this.body.Y < dest.Y)
-                            this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
+                            this.Move(new Point(this.Body.X, this.Body.Y + 1));
                         if (this.body.Y > dest.Y)
                             this.Move(new Point(this.Body.X, this.Body.Y - 1));
-                        Thread.Sleep(5);
+                        Thread.Sleep(this.speed);
                     }
                 }
 
@@ -210,24 +209,24 @@ namespace Praktika2023
                     offset = last.body.Width;
                 else if (shelf.DirectionOfApproach == 2)
                     offset = -last.body.Width;
-                while (this.body.X != last.Body.X+offset || this.body.Y != last.Body.Y + MainForm.DXY * 4)
+                while (this.body.X != last.Body.X + offset || this.body.Y != last.Body.Bottom + MainForm.DXY * 4 || last.Status == CustomerStatus.moving)
                 {
-                    while (this.body.X != last.Body.X+offset)
+                    while (this.body.X != last.Body.X + offset)
                     {
-                        if (this.body.X < last.Body.X+offset)
+                        if (this.body.X < last.Body.X + offset)
                             this.Move(new Point(this.body.X + 1, this.body.Y));
-                        if (this.body.X > last.Body.X+offset)
+                        if (this.body.X > last.Body.X + offset)
                             this.Move(new Point(this.Body.X - 1, this.Body.Y));
-                        Thread.Sleep(5);
+                        Thread.Sleep(this.speed);
                     }
 
-                    while (this.body.Y != last.Body.Top + last.Body.Height+  MainForm.DXY * 4)
+                    while (this.body.Y != last.Body.Top + last.Body.Height + MainForm.DXY * 4)
                     {
-                        if (this.body.Y < last.Body.Top + last.Body.Height + MainForm.DXY * 4)
-                            this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
-                        if (this.body.Y > last.Body.Top + last.Body.Height + MainForm.DXY * 4)
+                        if (this.body.Y < last.Body.Bottom + MainForm.DXY * 4)
+                            this.Move(new Point(this.Body.X, this.Body.Y + 1));
+                        if (this.body.Y > last.Body.Bottom + MainForm.DXY * 4)
                             this.Move(new Point(this.Body.X, this.Body.Y - 1));
-                        Thread.Sleep(5);
+                        Thread.Sleep(this.speed);
                     }
                 }
             }
@@ -240,34 +239,38 @@ namespace Praktika2023
         private void MoveToExit(Object obj)
         {
             Point dest = (Point)obj;
-            int destY = this.body.Y - this.body.Height - MainForm.DXY * 4;
+            int destY = dest.Y + MainForm.DXY * 10;
             while (this.body.Y != destY)
             {
                 this.Move(new Point(this.body.X, this.body.Y - 1));
-                Thread.Sleep(5);
+                Thread.Sleep(this.speed);
             }
-            int offsetX = (Randomizer.Rand(0, MainForm.DXY * 15));
-            if (this.body.X < dest.X - offsetX)
-                while (this.body.X != dest.X - offsetX)
-                {
-                    this.Move(new Point(this.body.X + 1, this.body.Y));
-                    Thread.Sleep(5);
-                }
-            if (this.body.X > dest.X + offsetX)
-                while (this.body.X != dest.X + offsetX)
-                {
-                    this.Move(new Point(this.body.X - 1, this.body.Y));
-                    Thread.Sleep(5);
-                }
-            while (this.body.Y != dest.Y - this.body.Height)
+            int offsetX = Randomizer.Rand(0, 3)*this.body.Width;
+           // while (this.body.X != dest.X && this.Body.Y != dest.Y)
             {
-                if (this.body.Y < dest.Y - this.body.Height)
-                    this.MoveTo(new Point(this.Body.X, this.Body.Y + 1));
-                if (this.body.Y > dest.Y - this.body.Height)
-                    this.Move(new Point(this.Body.X, this.Body.Y - 1));
-                Thread.Sleep(5);
+                if (this.body.Right < dest.X-offsetX)
+                    while (this.body.Right != dest.X - offsetX)
+                    {
+
+                        this.Move(new Point(this.body.X + 1, this.body.Y));
+                        Thread.Sleep(this.speed);
+                    }
+                if (this.body.Left > dest.X+offsetX)
+                    while (this.body.Left != dest.X + offsetX)
+                    {
+                        this.Move(new Point(this.body.X - 1, this.body.Y));
+                        Thread.Sleep(this.speed);
+                    }
             }
-            this.status = CustomerStatus.staying;
+            while (this.body.Y != dest.Y)
+            {
+                if (this.body.Y < dest.Y)
+                    this.Move(new Point(this.Body.X, this.Body.Y + 1));
+                if (this.body.Y > dest.Y)
+                    this.Move(new Point(this.Body.X, this.Body.Y - 1));
+                Thread.Sleep(this.speed);
+            }
+            this.status = CustomerStatus.exited;
 
         }
 
@@ -279,8 +282,7 @@ namespace Praktika2023
         public override string ToString()
         {
             string info = "Покупатель №" + Convert.ToString(this.Id) + "\nВозраст: " + Convert.ToString(this.age) + "\nБаланс кошелька: " + Convert.ToString(this.money) + " руб."
-                + "\nКоличество товаров в корзине: " + Convert.ToString(this.cart.CountOfProducts) + "\nCуммарная стоимость: " +
-                Convert.ToString(this.cart.TotalCost) + " руб.";
+                + "\nКоличество товаров в корзине: " + "\nCуммарная стоимость: " + " руб.";
             return info;
         }
     }
