@@ -35,6 +35,7 @@
             this.stopButton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.startButton = new System.Windows.Forms.Button();
             this.numOfShelvesLabel = new System.Windows.Forms.Label();
             this.cashierSpeedLabel = new System.Windows.Forms.Label();
             this.numOfCashDesksLabel = new System.Windows.Forms.Label();
@@ -44,6 +45,11 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.RepeatButton = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.num_column = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -51,12 +57,6 @@
             this.customerNumColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.totalIncomeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.averageCheckColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.startButton = new System.Windows.Forms.Button();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -64,8 +64,8 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -120,6 +120,17 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Начальные параметры";
+            // 
+            // startButton
+            // 
+            this.startButton.Location = new System.Drawing.Point(180, 316);
+            this.startButton.Margin = new System.Windows.Forms.Padding(2);
+            this.startButton.Name = "startButton";
+            this.startButton.Size = new System.Drawing.Size(111, 57);
+            this.startButton.TabIndex = 4;
+            this.startButton.Text = "Начать";
+            this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
             // numOfShelvesLabel
             // 
@@ -202,7 +213,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox2.Location = new System.Drawing.Point(37, 19);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(905, 645);
+            this.groupBox2.Size = new System.Drawing.Size(905, 658);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Результаты симуляций";
@@ -210,7 +221,7 @@
             // RepeatButton
             // 
             this.RepeatButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.RepeatButton.Location = new System.Drawing.Point(752, 586);
+            this.RepeatButton.Location = new System.Drawing.Point(752, 613);
             this.RepeatButton.Name = "RepeatButton";
             this.RepeatButton.Size = new System.Drawing.Size(147, 39);
             this.RepeatButton.TabIndex = 1;
@@ -232,12 +243,68 @@
             this.customerNumColumn,
             this.totalIncomeColumn,
             this.averageCheckColumn});
-            this.dataGridView1.Location = new System.Drawing.Point(3, 25);
+            this.dataGridView1.Location = new System.Drawing.Point(3, 21);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(896, 555);
+            this.dataGridView1.Size = new System.Drawing.Size(896, 573);
             this.dataGridView1.TabIndex = 0;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tabControl1.ItemSize = new System.Drawing.Size(2, 3);
+            this.tabControl1.Location = new System.Drawing.Point(-1, 12);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(1069, 700);
+            this.tabControl1.TabIndex = 5;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.Color.White;
+            this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tabPage1.Location = new System.Drawing.Point(4, 7);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1061, 689);
+            this.tabPage1.TabIndex = 0;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.BackColor = System.Drawing.Color.White;
+            this.tabPage2.Controls.Add(this.groupBox3);
+            this.tabPage2.Location = new System.Drawing.Point(4, 7);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1061, 706);
+            this.tabPage2.TabIndex = 1;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.groupBox3.Controls.Add(this.stopButton);
+            this.groupBox3.Controls.Add(this.pictureBox1);
+            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox3.Location = new System.Drawing.Point(75, 19);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(914, 645);
+            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Симуляция";
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.White;
+            this.tabPage3.Controls.Add(this.groupBox2);
+            this.tabPage3.Location = new System.Drawing.Point(4, 7);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(1061, 689);
+            this.tabPage3.TabIndex = 2;
             // 
             // num_column
             // 
@@ -271,7 +338,7 @@
             // customerNumColumn
             // 
             this.customerNumColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.customerNumColumn.HeaderText = "Всего покупателей";
+            this.customerNumColumn.HeaderText = "Обслужено покупателей";
             this.customerNumColumn.Name = "customerNumColumn";
             this.customerNumColumn.ReadOnly = true;
             // 
@@ -288,73 +355,6 @@
             this.averageCheckColumn.HeaderText = "Средний чек, руб.";
             this.averageCheckColumn.Name = "averageCheckColumn";
             this.averageCheckColumn.ReadOnly = true;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tabControl1.ItemSize = new System.Drawing.Size(2, 3);
-            this.tabControl1.Location = new System.Drawing.Point(-1, -5);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1069, 717);
-            this.tabControl1.TabIndex = 5;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.BackColor = System.Drawing.Color.White;
-            this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tabPage1.Location = new System.Drawing.Point(4, 7);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1061, 706);
-            this.tabPage1.TabIndex = 0;
-            // 
-            // startButton
-            // 
-            this.startButton.Location = new System.Drawing.Point(180, 316);
-            this.startButton.Margin = new System.Windows.Forms.Padding(2);
-            this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(111, 57);
-            this.startButton.TabIndex = 4;
-            this.startButton.Text = "Начать";
-            this.startButton.UseVisualStyleBackColor = true;
-            this.startButton.Click += new System.EventHandler(this.startButton_Click);
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.BackColor = System.Drawing.Color.White;
-            this.tabPage2.Controls.Add(this.groupBox3);
-            this.tabPage2.Location = new System.Drawing.Point(4, 7);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1061, 698);
-            this.tabPage2.TabIndex = 1;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.BackColor = System.Drawing.Color.White;
-            this.tabPage3.Controls.Add(this.groupBox2);
-            this.tabPage3.Location = new System.Drawing.Point(4, 7);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1061, 698);
-            this.tabPage3.TabIndex = 2;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.groupBox3.Controls.Add(this.stopButton);
-            this.groupBox3.Controls.Add(this.pictureBox1);
-            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox3.Location = new System.Drawing.Point(75, 19);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(914, 645);
-            this.groupBox3.TabIndex = 3;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Симуляция";
             // 
             // MainForm
             // 
@@ -376,8 +376,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -403,6 +403,8 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button RepeatButton;
+        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.DataGridViewTextBoxColumn num_column;
         private System.Windows.Forms.DataGridViewTextBoxColumn timeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
@@ -410,7 +412,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn customerNumColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn totalIncomeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn averageCheckColumn;
-        private System.Windows.Forms.Button RepeatButton;
-        private System.Windows.Forms.GroupBox groupBox3;
     }
 }

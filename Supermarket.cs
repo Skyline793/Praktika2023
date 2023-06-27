@@ -14,27 +14,37 @@ namespace Praktika2023
         Size sceneSize;
         int cashierSpeed;
 
-        private int totalIncome;
+        //private int totalIncome;
         public int TotalIncome
         {
             get
             {
-                totalIncome = 0;
+                int totalIncome = 0;
                 foreach (CashDesk desk in desks)
                     totalIncome += desk.Income;
                 return totalIncome;
             }
         }
-        private int averageCheck;
+        //private int averageCheck;
         public int AverageCheck
         {
             get
             {
-                averageCheck = 0;
+                int averageCheck = 0;
                 foreach (CashDesk desk in desks)
                     averageCheck += desk.DeskAverageCheck;
                 averageCheck /= desks.Count;
                 return averageCheck;
+            }
+        }
+        public int ServedCustomers
+        {
+            get
+            {
+                int servedCustomers = 0;
+                foreach (CashDesk desk in desks)
+                    servedCustomers += desk.ServedCustomers;
+                return servedCustomers;
             }
         }
         private int countOfCustomers;
@@ -96,9 +106,9 @@ namespace Praktika2023
             for (int i = 0; i < countOfShelves; i++)
             {
                 if (i == 0)
-                    shelves.Add(new ProductShelf(new Point(0, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 30), Color.Brown, 1, 1000, 1000));
+                    shelves.Add(new ProductShelf(new Point(0, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 30), Color.Brown, 1, 200, 200));
                 if (i == 1)
-                    shelves.Add(new ProductShelf(new Point(sizeOfScene.Width - MainForm.DXY * 10, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 30), Color.Brown, 2, 1000, 1000));
+                    shelves.Add(new ProductShelf(new Point(sizeOfScene.Width - MainForm.DXY * 10, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 30), Color.Brown, 2, 200, 200));
             }
             customers = new List<Customer>();
             this.countOfCustomers = 0;
@@ -106,6 +116,12 @@ namespace Praktika2023
 
         public void AddCustomer()
         {
+            if (shelves.Count == 1 && shelves[0].Queue.Count == ProductShelf.MaxCustomers)
+            {
+                    return;
+            }
+            if (shelves.Count==2 && shelves[0].Queue.Count == ProductShelf.MaxCustomers && shelves[1].Queue.Count == ProductShelf.MaxCustomers)
+                return;
             Customer newCustomer = new Customer(new Point(sceneSize.Width / 2, sceneSize.Height - MainForm.DXY * 10), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Green, ++countOfCustomers);
             customers.Add(newCustomer);
             if (shelves.Count == 1)
@@ -125,41 +141,22 @@ namespace Praktika2023
         public void SendCustomerToCashDesk(Customer customer)
         {
             int min = desks[0].CountOfCustomers;
-            int max = desks[0].CountOfCustomers;
             for (int i = 1; i < desks.Count; i++)
             {
                 if (desks[i].CountOfCustomers < min)
                     min = desks[i].CountOfCustomers;
-                if (desks[i].CountOfCustomers > max)
-                    max = desks[i].CountOfCustomers;
             }
-            if (min == CashDesk.MaxCustomers)
+            int ind = -1;
+            int distance = int.MaxValue;
+            for(int i = 0; i < desks.Count; i++)
             {
-
-            }
-            else if (min == max)
-            {
-                int ind = 0;
-                int distance = Math.Abs(customer.Body.X - desks[0].Form.X);
-                for (int i = 1; i < desks.Count; i++)
+                if(desks[i].Queue.Count==min && Math.Abs(customer.Body.X - desks[i].Form.X) < distance)
                 {
-                    if (Math.Abs(customer.Body.X - desks[i].Form.X) < distance)
-                    {
-                        distance = Math.Abs(customer.Body.X - desks[i].Form.X);
-                        ind = i;
-                    }
+                    distance = Math.Abs(customer.Body.X - desks[i].Form.X);
+                    ind = i;
                 }
-                this.desks[ind].AddCustomerToQueue(customer);
             }
-            else
-            {
-                for (int i = 0; i < desks.Count; i++)
-                    if (min == desks[i].CountOfCustomers)
-                    {
-                        this.desks[i].AddCustomerToQueue(customer);
-                        break;
-                    }
-            }
+            this.desks[ind].AddCustomerToQueue(customer);
         }
 
         public void Shoppings()
@@ -176,9 +173,9 @@ namespace Praktika2023
 
                         for (int i = 0; i < customer.Cart.CountOfProducts; i++)
                         {
-                            await Task.Delay(desk.Cashier.ScanSpeed);
                             check += desk.Cashier.ScanProduct(customer);
                         }
+                        await Task.Delay(desk.Cashier.ScanSpeed*customer.Cart.CountOfProducts);
                         if (customer.Age >= 60)
                         {
                             check = check - (check * 5 / 100);
@@ -209,9 +206,18 @@ namespace Praktika2023
                     customer.Status = CustomerStatus.staying;
                     Task task = new Task(async () =>
                     {
-                        customer.Cart = new ShoppingCart(customer.Money, 1, 10, 1, 100);
-                        for (int i = 0; i < customer.Cart.CountOfProducts; i++)
-                            await Task.Delay(1000);
+                        customer.Cart.FillTheCart(customer.Money, shelf);
+                            await Task.Delay(customer.Cart.CountOfProducts*1000);
+                        bool canGo = false;
+                        while (!canGo)
+                        {
+                            if (desks.Count == 1 && desks[0].Queue.Count < CashDesk.MaxCustomers)
+                                canGo = true;
+                            if (desks.Count == 2 && (desks[0].Queue.Count < CashDesk.MaxCustomers || desks[1].Queue.Count < CashDesk.MaxCustomers))
+                                canGo = true;
+                            if (desks.Count == 3 && (desks[0].Queue.Count < CashDesk.MaxCustomers || desks[1].Queue.Count < CashDesk.MaxCustomers || desks[2].Queue.Count < CashDesk.MaxCustomers))
+                                canGo = true;
+                        }
                         shelf.Queue.Dequeue();
                         if (MainForm.simulation)
                         {

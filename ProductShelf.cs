@@ -11,6 +11,7 @@ namespace Praktika2023
 
     internal class ProductShelf
     {
+        public static int MaxCustomers = 6;
         private Color color;
         public Color Color
         {
@@ -22,7 +23,15 @@ namespace Praktika2023
             get { return form; }
         }
         private List<Product> foodShelf;
+        public List<Product> FoodShelf
+        {
+            get { return foodShelf; }
+        }
         private List<Product> goodsShelf;
+        public List <Product> GoodsShelf
+        { 
+            get { return goodsShelf; }
+        }
         private Queue<Customer> queue;
         public Queue<Customer> Queue
         {

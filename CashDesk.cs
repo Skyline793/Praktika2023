@@ -19,6 +19,7 @@ namespace Praktika2023
 
     internal class CashDesk
     {
+        public static int MaxCustomers = 7;
         private int deskAverageCheck;
         public int DeskAverageCheck
         {
@@ -35,11 +36,6 @@ namespace Praktika2023
         public List<int> Checks
         {
             get { return checks; }
-        }
-        private static int maxCustomers = 10;
-        public static int MaxCustomers
-        {
-            get { return maxCustomers; }
         }
         private Rectangle form;
         public Rectangle Form
@@ -60,6 +56,10 @@ namespace Praktika2023
                 return income;
             }
 
+        }
+        public int ServedCustomers
+        {
+            get { return checks.Count; }
         }
         private Queue<Customer> queue;
         public Queue<Customer> Queue
@@ -112,7 +112,7 @@ namespace Praktika2023
         {
             this.queue.Enqueue(customer);
             customer.MoveTo(this);
-            
+
         }
 
         public void UpdateQueue()

@@ -23,6 +23,7 @@ namespace Praktika2023
         private Supermarket supermarket;
         private Rectangle entrance, exit;
         Stopwatch stopwatch;
+
         public MainForm()
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace Praktika2023
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
+            
             if (supermarket != null)
             {
                 DrawObjects(e.Graphics);
@@ -72,7 +74,7 @@ namespace Praktika2023
             int totalIncome=supermarket.TotalIncome;
             int averageCheck=supermarket.AverageCheck;
             this.dataGridView1.Rows.Add(Convert.ToString(simulationCount), elapsedTime, DesksShelves, Convert.ToString(speed), 
-                Convert.ToString(supermarket.CountOfCustomers), Convert.ToString(totalIncome), Convert.ToString(averageCheck));
+                Convert.ToString(supermarket.ServedCustomers), Convert.ToString(totalIncome), Convert.ToString(averageCheck));
             StopSimulation();
             this.tabControl1.SelectedIndex = 2;
     

@@ -20,8 +20,6 @@ namespace Praktika2023
     internal class Customer : Person
     {
         private int speed;
-        private Dictionary<ProductType, int> shoppingList;
-        private List<Product> shoppingCart;
         private Thread thread;
         public Thread Thread
         {
@@ -47,27 +45,23 @@ namespace Praktika2023
         public Customer(Point position, Size size, Color color, int ID) :
             base(position, size, color, ID)
         {
-
-            this.shoppingList = new Dictionary<ProductType, int>();
-            this.shoppingCart = new List<Product>();
-
             this.age = Randomizer.Rand(10, 85);
             if (this.age < 18)
             {
                 this.money = Randomizer.Rand(50, 1000);
-                this.speed = 5;
+                this.speed = 10;
             }
             else if (this.age < 60)
             {
                 this.money = Randomizer.Rand(500, 5000);
-                this.speed = 10;
+                this.speed = 13;
             }
             else
             {
                 this.money = Randomizer.Rand(200, 2000);
                 this.speed = 15;
             }
-
+            this.Cart = new ShoppingCart();
             this.status = CustomerStatus.staying;
         }
 
@@ -159,18 +153,7 @@ namespace Praktika2023
         {
 
             ProductShelf shelf = (ProductShelf)obj;
-            bool canCollect = false;
-            int ind;
-
-            if (shelf.Queue.Count == 0)
-                canCollect = true;
-            else if (this == shelf.Queue.Peek())
-                canCollect = true;
-            for (ind = 0; ind < shelf.Queue.Count; ind++)
-                if (this == shelf.Queue.ElementAt(ind))
-                    break;
-
-            if (canCollect)
+            if (shelf.Queue.Peek() == this)
             {
                 Point dest = new Point();
                 if (shelf.DirectionOfApproach == 1)
@@ -197,10 +180,14 @@ namespace Praktika2023
                         Thread.Sleep(this.speed);
                     }
                 }
-
+                this.status = CustomerStatus.readyToPickUp;
             }
             else
             {
+                int ind;
+                for (ind = 0; ind < shelf.Queue.Count; ind++)
+                    if (this == shelf.Queue.ElementAt(ind))
+                        break;
                 Customer last = shelf.Queue.ElementAt(ind - 1);
                 int offset = 0;
                 if (shelf.DirectionOfApproach == 1)
@@ -227,11 +214,8 @@ namespace Praktika2023
                         Thread.Sleep(this.speed);
                     }
                 }
-            }
-            if (canCollect)
-                this.status = CustomerStatus.readyToPickUp;
-            else
                 this.status = CustomerStatus.staying;
+            }
         }
 
         private void MoveToExit(Object obj)
@@ -243,23 +227,21 @@ namespace Praktika2023
                 this.Move(new Point(this.body.X, this.body.Y - 1));
                 Thread.Sleep(this.speed);
             }
-            int offsetX = Randomizer.Rand(0, 3)*this.body.Width;
-           // while (this.body.X != dest.X && this.Body.Y != dest.Y)
-            {
-                if (this.body.Right < dest.X-offsetX)
-                    while (this.body.Right != dest.X - offsetX)
-                    {
+            int offsetX = Randomizer.Rand(0, 3) * this.body.Width;
+            if (this.body.Right < dest.X - offsetX)
+                while (this.body.Right != dest.X - offsetX)
+                {
 
-                        this.Move(new Point(this.body.X + 1, this.body.Y));
-                        Thread.Sleep(this.speed);
-                    }
-                if (this.body.Left > dest.X+offsetX)
-                    while (this.body.Left != dest.X + offsetX)
-                    {
-                        this.Move(new Point(this.body.X - 1, this.body.Y));
-                        Thread.Sleep(this.speed);
-                    }
-            }
+                    this.Move(new Point(this.body.X + 1, this.body.Y));
+                    Thread.Sleep(this.speed);
+                }
+            if (this.body.Left > dest.X + offsetX)
+                while (this.body.Left != dest.X + offsetX)
+                {
+                    this.Move(new Point(this.body.X - 1, this.body.Y));
+                    Thread.Sleep(this.speed);
+                }
+
             while (this.body.Y != dest.Y)
             {
                 if (this.body.Y < dest.Y)
@@ -279,7 +261,8 @@ namespace Praktika2023
 
         public override string ToString()
         {
-            string info = String.Format("Покупатель №{0}\nВозраст: {1}\nБаланс кошелька: {2} руб.", Convert.ToString(this.Id), Convert.ToString(this.age), Convert.ToString(this.money));
+            string info = String.Format("Покупатель №{0}\nВозраст: {1}\nБаланс кошелька: {2} руб.\n", Convert.ToString(this.Id), Convert.ToString(this.age),
+                Convert.ToString(this.money)) + this.cart.ToString();
             return info;
         }
     }

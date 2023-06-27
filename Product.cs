@@ -38,20 +38,32 @@ namespace Praktika2023
         {
             this.type = type;
             this.priceSegment = priceSegment;
-            Random rand = new Random();
-
+            if(this.type==ProductType.food)
             switch (this.priceSegment)
             {
                 case PriceSegment.premium:
-                    this.price = Randomizer.Rand(1000, 1500);
+                        this.price = 449;
                     break;
                 case PriceSegment.medium:
-                    this.price = Randomizer.Rand(500, 1000);
+                        this.price = 249;
                     break;
                 case PriceSegment.low:
-                    this.price = Randomizer.Rand(10, 500);
+                        this.price = 59;
                     break;
             }
+            if (this.type == ProductType.goods)
+                switch (this.priceSegment)
+                {
+                    case PriceSegment.premium:
+                        this.price = 599;
+                        break;
+                    case PriceSegment.medium:
+                        this.price = 399;
+                        break;
+                    case PriceSegment.low:
+                        this.price = 99;
+                        break;
+                }
 
         }
     }
