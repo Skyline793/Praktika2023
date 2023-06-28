@@ -21,14 +21,15 @@ namespace Praktika2023
         private int simulationCount;
         private int cashiersSpeed;
         private Supermarket supermarket;
-        private Rectangle entrance, exit;
+        private Rectangle entrance, exit, warehouse;
         Stopwatch stopwatch;
 
         public MainForm()
         {
             InitializeComponent();
-            exit = new Rectangle(this.pictureBox1.Width / 2 - MainForm.DXY * 20, -MainForm.DXY * 10, MainForm.DXY * 40, MainForm.DXY * 20);
-            entrance = new Rectangle(this.pictureBox1.Width / 2 - MainForm.DXY * 20, this.pictureBox1.Height - MainForm.DXY * 10, MainForm.DXY * 40, MainForm.DXY * 20);
+            exit = new Rectangle(this.pictureBox1.Width / 2 - MainForm.DXY * 15, -MainForm.DXY * 5, MainForm.DXY * 30, MainForm.DXY * 10);
+            entrance = new Rectangle(this.pictureBox1.Width / 2 - MainForm.DXY * 15, this.pictureBox1.Height - MainForm.DXY * 10, MainForm.DXY * 30, MainForm.DXY * 20);
+            warehouse = new Rectangle(this.pictureBox1.Width / 4, this.pictureBox1.Height - MainForm.DXY * 2, MainForm.DXY * 10, MainForm.DXY * 2);
             stopwatch = new Stopwatch();
             simulation = false;
             simulationCount = 0;
@@ -50,16 +51,18 @@ namespace Praktika2023
             this.pictureBox1.Invalidate();
             this.supermarket.PickingUp();
             this.supermarket.Shoppings();
-            for (int i = supermarket.Customers.Count - 1; i >= 0; i--)
-                if (supermarket.Customers[i].Status == CustomerStatus.exited)
-                {
-                    supermarket.Customers.RemoveAt(i);
-                }
+            this.supermarket.TopUpTheShelves();
+            
 
         }
 
         private void timer2_Tick(object sender, EventArgs e)
         {
+            for (int i = supermarket.Customers.Count - 1; i >= 0; i--)
+                if (supermarket.Customers[i].Status == CustomerStatus.exited)
+                {
+                    supermarket.Customers.RemoveAt(i);
+                }
             int min = 5 - this.numOfCashDesks-this.numOfShelves/2;
             timer2.Interval = Randomizer.Rand(min,10) * 1000;
             this.supermarket.AddCustomer();
@@ -87,7 +90,7 @@ namespace Praktika2023
             cashiersSpeed = (int)(Convert.ToDouble(this.cashierSpeedComboBox.SelectedItem)*1000);
             numOfShelves = Convert.ToInt32(this.numOfShelvesComboBox.SelectedItem);
             timer2.Interval = 10000;
-            supermarket = new Supermarket(numOfCashDesks, numOfShelves, cashiersSpeed, pictureBox1.Size);
+            supermarket = new Supermarket(numOfCashDesks, numOfShelves, cashiersSpeed, pictureBox1.Size, warehouse, entrance, exit);
             stopwatch.Start();
             timer1.Start();
             timer2.Start();
@@ -97,6 +100,7 @@ namespace Praktika2023
             new ToolTip().Show("Это кассир\nКликните, чтобы узнать\nскорость сканирования", this.pictureBox1, supermarket.Cashiers[0].Body.Right, supermarket.Cashiers[0].Body.Top - MainForm.DXY * 4, 10000);
             new ToolTip().Show("Это полка с товарами\nКликните по ней, чтобы узнать,\nсколько в ней товаров", this.pictureBox1, supermarket.Shelves[0].Form.Right, supermarket.Shelves[0].Form.Top, 10000);
             new ToolTip().Show("Это вход. Отсюда заходят покупатели\nКликните на покупателя, чтобы узнать\nего возраст, список покупок и баланс", this.pictureBox1, this.entrance.X, this.entrance.Top - MainForm.DXY * 15, 10000);
+            new ToolTip().Show("Это дверь на склад\nКогда на полках мало товаров,\nотсюда выходит менеджер\n и пополняет их", this.pictureBox1, this.warehouse.X-this.warehouse.Width, this.warehouse.Top-MainForm.DXY*15, 10000);
         }
 
         private void DrawObjects(Graphics g)
@@ -109,10 +113,12 @@ namespace Praktika2023
                 g.FillRectangle(new SolidBrush(desk.Color), desk.Form);
             foreach (ProductShelf shelf in supermarket.Shelves)
                 g.FillRectangle(new SolidBrush(shelf.Color), shelf.Form);
+            g.FillEllipse(new SolidBrush(supermarket.Manager.Color), supermarket.Manager.Body);
             g.FillPie(new SolidBrush(Color.Brown), entrance, 180, 180);
-            g.DrawString("ВХОД", new Font("Arial", 14), new SolidBrush(Color.Black), this.pictureBox1.Width / 2 - 40, this.pictureBox1.Height - 30);
-            g.FillPie(new SolidBrush(Color.Brown), exit, 0, 180);
-            g.DrawString("ВЫХОД", new Font("Arial", 14), new SolidBrush(Color.Black), this.pictureBox1.Width / 2 - 45, 15);
+            g.FillRectangle(new SolidBrush(Color.Brown), exit);
+            g.DrawString("ВХОД", new Font("Arial", 14), new SolidBrush(Color.Black), this.pictureBox1.Width / 2 - 40, entrance.Top);
+            g.DrawString("ВЫХОД", new Font("Arial", 14), new SolidBrush(Color.Black), exit.Left, exit.Bottom - exit.Height/2);
+            g.FillRectangle(new SolidBrush((Color.Black)), warehouse);
         }
 
         private void StopSimulation()

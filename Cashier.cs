@@ -22,11 +22,11 @@ namespace Praktika2023
 
         public int ScanProduct(Customer customer)
         {
-            return customer.Cart.ShoppingList.Pop().Price;
+            return customer.ShoppingCart.Pop().Price;
 
         }
 
-        public override void Move(Point Dest)
+        protected override void Move(Point Dest)
         {
             throw new NotImplementedException();
         }

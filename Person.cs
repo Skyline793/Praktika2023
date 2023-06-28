@@ -31,7 +31,7 @@ namespace Praktika2023
             this.body = new Rectangle(position.X, position.Y, size.Width, size.Height);
             this.Id = ID;
         }
-        abstract public void Move(Point Dest);
+        abstract protected void Move(Point Dest);
 
     }
 }

@@ -36,11 +36,16 @@ namespace Praktika2023
         {
             get { return money; }
         }
-        private ShoppingCart cart;
-        public ShoppingCart Cart
+
+        private Dictionary<ProductType, int> shoppingList;
+        public Dictionary<ProductType, int> ShoppingList
         {
-            get { return cart; }
-            set { cart = value; }
+            get { return shoppingList; }
+        }
+        private Stack<Product> shoppingCart;
+        public Stack<Product> ShoppingCart
+        {
+            get { return shoppingCart; }
         }
         public Customer(Point position, Size size, Color color, int ID) :
             base(position, size, color, ID)
@@ -48,24 +53,27 @@ namespace Praktika2023
             this.age = Randomizer.Rand(10, 85);
             if (this.age < 18)
             {
-                this.money = Randomizer.Rand(50, 1000);
+                this.money = Randomizer.Rand(100, 1000);
                 this.speed = 10;
             }
             else if (this.age < 60)
             {
-                this.money = Randomizer.Rand(500, 5000);
+                this.money = Randomizer.Rand(600, 5000);
                 this.speed = 13;
             }
             else
             {
-                this.money = Randomizer.Rand(200, 2000);
+                this.money = Randomizer.Rand(400, 3500);
                 this.speed = 15;
             }
-            this.Cart = new ShoppingCart();
+            this.shoppingList = new Dictionary<ProductType, int>();
+            this.shoppingList[ProductType.food] = 0;
+            this.shoppingList[ProductType.goods] = 0;
+            this.shoppingCart = new Stack<Product>();
             this.status = CustomerStatus.staying;
         }
 
-        public override void Move(Point Dest)
+        protected override void Move(Point Dest)
         {
             body = new Rectangle(Dest.X, Dest.Y, body.Width, body.Height);
         }
@@ -83,7 +91,7 @@ namespace Praktika2023
                 thread = new Thread(this.MoveToShelf);
                 thread.Start(obj);
             }
-            if (obj.GetType() == typeof(Point))
+            if (obj.GetType() == typeof(Rectangle))
             {
                 thread = new Thread(this.MoveToExit);
                 thread.Start(obj);
@@ -96,7 +104,6 @@ namespace Praktika2023
             CashDesk dest = (CashDesk)obj;
             if (dest.Queue.Peek() == this)
             {
-
                 while (this.body.X != dest.Form.X - this.body.Width - MainForm.DXY * 2 || this.body.Y != dest.Form.Y)
                 {
                     while (this.body.X != dest.Form.X - this.body.Width - MainForm.DXY * 2)
@@ -161,6 +168,12 @@ namespace Praktika2023
                 else if (shelf.DirectionOfApproach == 2)
                     dest = new Point(shelf.Form.Left - this.body.Width - MainForm.DXY * 4, shelf.Form.Top + 3 * this.body.Height);
 
+                //int offsetY = this.body.Y - 2 * this.body.Height;
+                //while (this.body.Y != offsetY)
+                //{
+                //    this.Move(new Point(this.body.X, this.body.Y - 1));
+                //    Thread.Sleep(this.speed);
+                //}
                 while (this.body.X != dest.X || this.body.Y != dest.Y)
                 {
                     while (this.body.X != dest.X)
@@ -189,23 +202,29 @@ namespace Praktika2023
                     if (this == shelf.Queue.ElementAt(ind))
                         break;
                 Customer last = shelf.Queue.ElementAt(ind - 1);
-                int offset = 0;
+                //int offsetY = this.body.Y - 2 * this.body.Height;
+                //while (this.body.Y != offsetY)
+                //{
+                //    this.Move(new Point(this.body.X, this.body.Y - 1));
+                //    Thread.Sleep(this.speed);
+                //}
+                int offsetX = 0;
                 if (shelf.DirectionOfApproach == 1)
-                    offset = last.body.Width;
+                    offsetX = last.body.Width;
                 else if (shelf.DirectionOfApproach == 2)
-                    offset = -last.body.Width;
-                while (this.body.X != last.Body.X + offset || this.body.Y != last.Body.Bottom + MainForm.DXY * 4 || last.Status == CustomerStatus.moving)
+                    offsetX = -last.body.Width;
+                while (this.body.X != last.Body.X + offsetX || this.body.Y != last.Body.Bottom + MainForm.DXY * 4 || last.Status == CustomerStatus.moving)
                 {
-                    while (this.body.X != last.Body.X + offset)
+                    while (this.body.X != last.Body.X + offsetX)
                     {
-                        if (this.body.X < last.Body.X + offset)
+                        if (this.body.X < last.Body.X + offsetX)
                             this.Move(new Point(this.body.X + 1, this.body.Y));
-                        if (this.body.X > last.Body.X + offset)
+                        if (this.body.X > last.Body.X + offsetX)
                             this.Move(new Point(this.Body.X - 1, this.Body.Y));
                         Thread.Sleep(this.speed);
                     }
 
-                    while (this.body.Y != last.Body.Top + last.Body.Height + MainForm.DXY * 4)
+                    while (this.body.Y != last.Body.Bottom + MainForm.DXY * 4)
                     {
                         if (this.body.Y < last.Body.Bottom + MainForm.DXY * 4)
                             this.Move(new Point(this.Body.X, this.Body.Y + 1));
@@ -220,38 +239,102 @@ namespace Praktika2023
 
         private void MoveToExit(Object obj)
         {
-            Point dest = (Point)obj;
-            int destY = dest.Y + MainForm.DXY * 10;
-            while (this.body.Y != destY)
+            Rectangle exit = (Rectangle)obj;
+            int offsetY = exit.Bottom+this.body.Height;
+            while (this.body.Y != offsetY)
             {
                 this.Move(new Point(this.body.X, this.body.Y - 1));
                 Thread.Sleep(this.speed);
             }
-            int offsetX = Randomizer.Rand(0, 3) * this.body.Width;
-            if (this.body.Right < dest.X - offsetX)
-                while (this.body.Right != dest.X - offsetX)
+            int offsetX = Randomizer.Rand(this.body.Width, exit.Width/2)/this.body.Width*this.body.Width;
+            if (this.body.Left < exit.X + exit.Width/2 - offsetX)
+                while (this.body.Left != exit.X +exit.Width/2 - offsetX)
                 {
 
                     this.Move(new Point(this.body.X + 1, this.body.Y));
                     Thread.Sleep(this.speed);
                 }
-            if (this.body.Left > dest.X + offsetX)
-                while (this.body.Left != dest.X + offsetX)
+            if (this.body.Right >exit.X + exit.Width/2 + offsetX)
+                while (this.body.Right != exit.X + exit.Width / 2 + offsetX)
                 {
                     this.Move(new Point(this.body.X - 1, this.body.Y));
                     Thread.Sleep(this.speed);
                 }
 
-            while (this.body.Y != dest.Y)
+            while (this.body.Y != exit.Top)
             {
-                if (this.body.Y < dest.Y)
+                if (this.body.Y < exit.Top)
                     this.Move(new Point(this.Body.X, this.Body.Y + 1));
-                if (this.body.Y > dest.Y)
+                if (this.body.Y > exit.Top)
                     this.Move(new Point(this.Body.X, this.Body.Y - 1));
                 Thread.Sleep(this.speed);
             }
             this.status = CustomerStatus.exited;
 
+        }
+
+        public void FillTheCart(ProductShelf shelf)
+        {
+            do
+            {
+                this.shoppingList[ProductType.food] = Randomizer.Rand(0, this.money % 10 + 5);
+                this.shoppingList[ProductType.goods] = Randomizer.Rand(0, this.money % 10 + 5);
+            } while (this.shoppingList[ProductType.food]+this.shoppingList[ProductType.goods] <= 0);
+            PriceSegment segment = new PriceSegment();
+            int Try = 1,
+                totalCost = 0;
+            do
+            {
+                totalCost = 0;
+                for (int i = 0; i < this.shoppingList[ProductType.food]; i++)
+                {
+                    Product food = null;
+                    while (food == null)
+                    {
+                        int seg = Randomizer.Rand(0, 4);
+                        if (seg <= 1) segment = PriceSegment.low;
+                        if (seg > 1 && seg < 4) segment = PriceSegment.medium;
+                        if (seg == 4) segment = PriceSegment.premium;
+                        food = shelf.FoodShelf.Find(pr => pr.PriceSegment == segment);
+                        shelf.FoodShelf.Remove(food);
+                    }
+                    this.shoppingCart.Push(food);
+                    totalCost += food.Price;
+                }
+                for (int i = 0; i < this.shoppingList[ProductType.goods]; i++)
+                {
+                    Product goods = null;
+                    while (goods == null)
+                    {
+                        int seg = Randomizer.Rand(0, 4);
+                        if (seg <= 1) segment = PriceSegment.low;
+                        if (seg > 1 && seg < 4) segment = PriceSegment.medium;
+                        if (seg == 4) segment = PriceSegment.premium;
+                        goods = shelf.GoodsShelf.Find(pr => pr.PriceSegment == segment);
+                        shelf.GoodsShelf.Remove(goods);
+                    }
+                    this.ShoppingCart.Push(goods);
+                    totalCost += goods.Price;
+                }
+                if (totalCost > this.money)
+                {
+                    while (this.shoppingCart.Count > 0)
+                    {
+                        Product ret = shoppingCart.Pop();
+                        if (ret.Type == ProductType.food)
+                            shelf.FoodShelf.Add(ret);
+                        else
+                            shelf.GoodsShelf.Add(ret);
+                    }
+                    if (Try % 5 == 0)
+                    {
+                        int rand = Randomizer.Rand(1, 2);
+                        if (rand == 1 && this.shoppingList[ProductType.food] > 0) this.shoppingList[ProductType.food]--;
+                        if (rand == 2 && this.shoppingList[ProductType.goods] > 0) this.shoppingList[ProductType.goods]--;
+                    }
+                    Try++;
+                }
+            } while (totalCost > this.money);
         }
 
         public void MakePayment(int check)
@@ -261,8 +344,9 @@ namespace Praktika2023
 
         public override string ToString()
         {
-            string info = String.Format("Покупатель №{0}\nВозраст: {1}\nБаланс кошелька: {2} руб.\n", Convert.ToString(this.Id), Convert.ToString(this.age),
-                Convert.ToString(this.money)) + this.cart.ToString();
+            string info = String.Format("Покупатель №{0}\nВозраст: {1}\nБаланс кошелька: {2} руб.\nКорзина\nКоличество съедобных товаров: {3}\nКоличество несъедобных товаров: {4}",
+                Convert.ToString(this.Id), Convert.ToString(this.age), Convert.ToString(this.money), Convert.ToString(this.ShoppingList[ProductType.food]),
+                Convert.ToString(this.ShoppingList[ProductType.goods]));
             return info;
         }
     }
