@@ -136,7 +136,7 @@ namespace Praktika2023
                 return;
             if (shelves.Count == 2 && shelves[0].Queue.Count == ProductShelf.MaxCustomers && shelves[1].Queue.Count == ProductShelf.MaxCustomers)
                 return;
-            Point start = new Point(this.entranceDoor.Left + Randomizer.Rand(0, this.entranceDoor.Width - MainForm.DXY * 4) / (MainForm.DXY * 4) * MainForm.DXY * 4, this.entranceDoor.Top);
+            Point start = new Point(this.entranceDoor.Left+this.entranceDoor.Width/2-MainForm.DXY*2, this.entranceDoor.Top);
             Customer newCustomer = new Customer(start, new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Green, ++countOfCustomers);
             customers.Add(newCustomer);
             if (shelves.Count == 1)
@@ -185,12 +185,12 @@ namespace Praktika2023
                     Customer customer = desk.Queue.Peek();
                     Task task = new Task(async () =>
                     {
-
-                        for (int i = 0; i < customer.ShoppingCart.Count; i++)
+                        int countOfProducts = customer.ShoppingList[ProductType.food] + customer.ShoppingList[ProductType.goods];
+                        for (int i = 0; i < countOfProducts; i++)
                         {
                             check += desk.Cashier.ScanProduct(customer);
                         }
-                        await Task.Delay(desk.Cashier.ScanSpeed * customer.ShoppingCart.Count);
+                        await Task.Delay(desk.Cashier.ScanSpeed * countOfProducts);
                         if (customer.Age >= 60)
                         {
                             check = check - (check * 5 / 100);
@@ -255,6 +255,18 @@ namespace Praktika2023
                         break;
                     }
                 }
+        }
+
+        public bool IsOverFull()
+        {
+            bool overfull = true;
+            foreach(var shelf in shelves)
+                if(shelf.Queue.Count < ProductShelf.MaxCustomers)
+                    overfull = false;
+            foreach(var desk in desks)
+                if(desk.Queue.Count < CashDesk.MaxCustomers)
+                    overfull=false;
+            return overfull;
         }
     }
 }

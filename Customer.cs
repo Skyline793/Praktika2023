@@ -59,12 +59,12 @@ namespace Praktika2023
             else if (this.age < 60)
             {
                 this.money = Randomizer.Rand(600, 5000);
-                this.speed = 13;
+                this.speed = 10;
             }
             else
             {
                 this.money = Randomizer.Rand(400, 3500);
-                this.speed = 15;
+                this.speed = 10;
             }
             this.shoppingList = new Dictionary<ProductType, int>();
             this.shoppingList[ProductType.food] = 0;
@@ -127,13 +127,24 @@ namespace Praktika2023
             }
             else
             {
-                int ind;
-                for (ind = 0; ind < dest.Queue.Count; ind++)
+                Customer last = null;
+                int ind = -1 ;
+                while (last == null)
                 {
-                    if (dest.Queue.ElementAt(ind).Equals(this) == true)
-                        break;
+                    try
+                    {
+                        for (ind = 0; ind < dest.Queue.Count; ind++)
+                        {
+                            if (dest.Queue.ElementAt(ind) == this)
+                                break;
+                        }
+                        last = dest.Queue.ElementAt(ind - 1);
+                    }
+                    catch (Exception ex)
+                    {
+                        last = null;
+                    }
                 }
-                Customer last = dest.Queue.ElementAt(ind - 1);
                 while (this.body.X != last.Body.X || this.body.Y != last.Body.Bottom + MainForm.DXY * 4 || last.Status == CustomerStatus.moving)
                 {
                     while (this.body.X != last.Body.X)
@@ -164,16 +175,10 @@ namespace Praktika2023
             {
                 Point dest = new Point();
                 if (shelf.DirectionOfApproach == 1)
-                    dest = new Point(shelf.Form.Right + MainForm.DXY * 4, shelf.Form.Top + 3 * this.body.Height);
+                    dest = new Point(shelf.Form.Right + MainForm.DXY * 4, shelf.Form.Top + 2 * this.body.Height);
                 else if (shelf.DirectionOfApproach == 2)
-                    dest = new Point(shelf.Form.Left - this.body.Width - MainForm.DXY * 4, shelf.Form.Top + 3 * this.body.Height);
+                    dest = new Point(shelf.Form.Left - this.body.Width - MainForm.DXY * 4, shelf.Form.Top + 2 * this.body.Height);
 
-                //int offsetY = this.body.Y - 2 * this.body.Height;
-                //while (this.body.Y != offsetY)
-                //{
-                //    this.Move(new Point(this.body.X, this.body.Y - 1));
-                //    Thread.Sleep(this.speed);
-                //}
                 while (this.body.X != dest.X || this.body.Y != dest.Y)
                 {
                     while (this.body.X != dest.X)
@@ -197,23 +202,37 @@ namespace Praktika2023
             }
             else
             {
-                int ind;
-                for (ind = 0; ind < shelf.Queue.Count; ind++)
-                    if (this == shelf.Queue.ElementAt(ind))
-                        break;
-                Customer last = shelf.Queue.ElementAt(ind - 1);
-                //int offsetY = this.body.Y - 2 * this.body.Height;
-                //while (this.body.Y != offsetY)
-                //{
-                //    this.Move(new Point(this.body.X, this.body.Y - 1));
-                //    Thread.Sleep(this.speed);
-                //}
+                int ind = -1 ;
+                Customer last = null;
+                while (last == null)
+                {
+                    try
+                    {
+                        for (ind = 0; ind < shelf.Queue.Count; ind++)
+                            if (this == shelf.Queue.ElementAt(ind))
+                                break;
+                        last = shelf.Queue.ElementAt(ind - 1);
+                    }
+                    catch (Exception ex)
+                    {
+                        last = null;
+                    }
+                }
                 int offsetX = 0;
                 if (shelf.DirectionOfApproach == 1)
+                {
                     offsetX = last.body.Width;
+                    if (ind >=5)
+                        offsetX += MainForm.DXY * 3;
+                }
                 else if (shelf.DirectionOfApproach == 2)
+                {
                     offsetX = -last.body.Width;
-                while (this.body.X != last.Body.X + offsetX || this.body.Y != last.Body.Bottom + MainForm.DXY * 4 || last.Status == CustomerStatus.moving)
+                    if (ind >=5)
+                        offsetX -= MainForm.DXY * 3;
+                }
+
+                    while (this.body.X != last.Body.X + offsetX || this.body.Y != last.Body.Bottom + MainForm.DXY * 4 || last.Status == CustomerStatus.moving)
                 {
                     while (this.body.X != last.Body.X + offsetX)
                     {
@@ -223,7 +242,7 @@ namespace Praktika2023
                             this.Move(new Point(this.Body.X - 1, this.Body.Y));
                         Thread.Sleep(this.speed);
                     }
-
+                    if (ind < 5)
                     while (this.body.Y != last.Body.Bottom + MainForm.DXY * 4)
                     {
                         if (this.body.Y < last.Body.Bottom + MainForm.DXY * 4)

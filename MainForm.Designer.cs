@@ -29,12 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.stopButton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.maxFrequencyLabel = new System.Windows.Forms.Label();
+            this.maxFrequencytrackBar = new System.Windows.Forms.TrackBar();
+            this.minFrequencyLabel = new System.Windows.Forms.Label();
+            this.minFrequencytrackBar = new System.Windows.Forms.TrackBar();
             this.startButton = new System.Windows.Forms.Button();
             this.numOfShelvesLabel = new System.Windows.Forms.Label();
             this.cashierSpeedLabel = new System.Windows.Forms.Label();
@@ -42,14 +47,8 @@
             this.cashierSpeedComboBox = new System.Windows.Forms.ComboBox();
             this.numOfShelvesComboBox = new System.Windows.Forms.ComboBox();
             this.numOfCashDeskComboBox = new System.Windows.Forms.ComboBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.RepeatButton = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.num_column = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,28 +56,23 @@
             this.customerNumColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.totalIncomeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.averageCheckColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.stopButton = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.maxFrequencytrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.minFrequencytrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.pictureBox1.Location = new System.Drawing.Point(5, 27);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(900, 550);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
-            this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseClick);
             // 
             // timer1
             // 
@@ -90,20 +84,13 @@
             this.timer2.Interval = 2000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
-            // stopButton
-            // 
-            this.stopButton.Location = new System.Drawing.Point(414, 583);
-            this.stopButton.Margin = new System.Windows.Forms.Padding(2);
-            this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(111, 57);
-            this.stopButton.TabIndex = 2;
-            this.stopButton.Text = "Стоп";
-            this.stopButton.UseVisualStyleBackColor = true;
-            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
-            // 
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.groupBox1.Controls.Add(this.maxFrequencyLabel);
+            this.groupBox1.Controls.Add(this.maxFrequencytrackBar);
+            this.groupBox1.Controls.Add(this.minFrequencyLabel);
+            this.groupBox1.Controls.Add(this.minFrequencytrackBar);
             this.groupBox1.Controls.Add(this.startButton);
             this.groupBox1.Controls.Add(this.numOfShelvesLabel);
             this.groupBox1.Controls.Add(this.cashierSpeedLabel);
@@ -112,18 +99,61 @@
             this.groupBox1.Controls.Add(this.numOfShelvesComboBox);
             this.groupBox1.Controls.Add(this.numOfCashDeskComboBox);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox1.Location = new System.Drawing.Point(269, 94);
+            this.groupBox1.Location = new System.Drawing.Point(308, 84);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(482, 377);
+            this.groupBox1.Size = new System.Drawing.Size(606, 609);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Начальные параметры";
             // 
+            // maxFrequencyLabel
+            // 
+            this.maxFrequencyLabel.AutoSize = true;
+            this.maxFrequencyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.maxFrequencyLabel.Location = new System.Drawing.Point(5, 396);
+            this.maxFrequencyLabel.Name = "maxFrequencyLabel";
+            this.maxFrequencyLabel.Size = new System.Drawing.Size(567, 20);
+            this.maxFrequencyLabel.TabIndex = 9;
+            this.maxFrequencyLabel.Text = "Выберите минимальную границу частоты появления нового покупателя: ";
+            // 
+            // maxFrequencytrackBar
+            // 
+            this.maxFrequencytrackBar.Location = new System.Drawing.Point(142, 448);
+            this.maxFrequencytrackBar.Maximum = 9;
+            this.maxFrequencytrackBar.Minimum = 1;
+            this.maxFrequencytrackBar.Name = "maxFrequencytrackBar";
+            this.maxFrequencytrackBar.Size = new System.Drawing.Size(283, 45);
+            this.maxFrequencytrackBar.TabIndex = 8;
+            this.maxFrequencytrackBar.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.maxFrequencytrackBar.Value = 1;
+            this.maxFrequencytrackBar.Scroll += new System.EventHandler(this.maxFrequencytrackBar_Scroll);
+            // 
+            // minFrequencyLabel
+            // 
+            this.minFrequencyLabel.AutoSize = true;
+            this.minFrequencyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.minFrequencyLabel.Location = new System.Drawing.Point(5, 297);
+            this.minFrequencyLabel.Name = "minFrequencyLabel";
+            this.minFrequencyLabel.Size = new System.Drawing.Size(567, 20);
+            this.minFrequencyLabel.TabIndex = 7;
+            this.minFrequencyLabel.Text = "Выберите минимальную границу частоты появления нового покупателя: ";
+            // 
+            // minFrequencytrackBar
+            // 
+            this.minFrequencytrackBar.Location = new System.Drawing.Point(142, 338);
+            this.minFrequencytrackBar.Minimum = 1;
+            this.minFrequencytrackBar.Name = "minFrequencytrackBar";
+            this.minFrequencytrackBar.Size = new System.Drawing.Size(283, 45);
+            this.minFrequencytrackBar.TabIndex = 6;
+            this.minFrequencytrackBar.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.minFrequencytrackBar.Value = 1;
+            this.minFrequencytrackBar.Scroll += new System.EventHandler(this.minFrequencytrackBar_Scroll);
+            // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(180, 316);
+            this.startButton.Location = new System.Drawing.Point(230, 548);
             this.startButton.Margin = new System.Windows.Forms.Padding(2);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(111, 57);
@@ -136,7 +166,7 @@
             // 
             this.numOfShelvesLabel.AutoSize = true;
             this.numOfShelvesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.numOfShelvesLabel.Location = new System.Drawing.Point(24, 125);
+            this.numOfShelvesLabel.Location = new System.Drawing.Point(135, 125);
             this.numOfShelvesLabel.Name = "numOfShelvesLabel";
             this.numOfShelvesLabel.Size = new System.Drawing.Size(317, 20);
             this.numOfShelvesLabel.TabIndex = 5;
@@ -146,7 +176,7 @@
             // 
             this.cashierSpeedLabel.AutoSize = true;
             this.cashierSpeedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cashierSpeedLabel.Location = new System.Drawing.Point(24, 205);
+            this.cashierSpeedLabel.Location = new System.Drawing.Point(88, 205);
             this.cashierSpeedLabel.Name = "cashierSpeedLabel";
             this.cashierSpeedLabel.Size = new System.Drawing.Size(436, 20);
             this.cashierSpeedLabel.TabIndex = 4;
@@ -156,7 +186,7 @@
             // 
             this.numOfCashDesksLabel.AutoSize = true;
             this.numOfCashDesksLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.numOfCashDesksLabel.Location = new System.Drawing.Point(24, 43);
+            this.numOfCashDesksLabel.Location = new System.Drawing.Point(138, 43);
             this.numOfCashDesksLabel.Name = "numOfCashDesksLabel";
             this.numOfCashDesksLabel.Size = new System.Drawing.Size(303, 20);
             this.numOfCashDesksLabel.TabIndex = 3;
@@ -173,7 +203,7 @@
             "2",
             "2,5",
             "3"});
-            this.cashierSpeedComboBox.Location = new System.Drawing.Point(28, 241);
+            this.cashierSpeedComboBox.Location = new System.Drawing.Point(230, 242);
             this.cashierSpeedComboBox.Name = "cashierSpeedComboBox";
             this.cashierSpeedComboBox.Size = new System.Drawing.Size(124, 32);
             this.cashierSpeedComboBox.TabIndex = 2;
@@ -186,7 +216,7 @@
             this.numOfShelvesComboBox.Items.AddRange(new object[] {
             "1",
             "2"});
-            this.numOfShelvesComboBox.Location = new System.Drawing.Point(28, 161);
+            this.numOfShelvesComboBox.Location = new System.Drawing.Point(230, 160);
             this.numOfShelvesComboBox.Name = "numOfShelvesComboBox";
             this.numOfShelvesComboBox.Size = new System.Drawing.Size(124, 32);
             this.numOfShelvesComboBox.TabIndex = 1;
@@ -200,28 +230,15 @@
             "1",
             "2",
             "3"});
-            this.numOfCashDeskComboBox.Location = new System.Drawing.Point(28, 80);
+            this.numOfCashDeskComboBox.Location = new System.Drawing.Point(230, 79);
             this.numOfCashDeskComboBox.Name = "numOfCashDeskComboBox";
             this.numOfCashDeskComboBox.Size = new System.Drawing.Size(124, 32);
             this.numOfCashDeskComboBox.TabIndex = 0;
             // 
-            // groupBox2
-            // 
-            this.groupBox2.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.groupBox2.Controls.Add(this.RepeatButton);
-            this.groupBox2.Controls.Add(this.dataGridView1);
-            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox2.Location = new System.Drawing.Point(37, 19);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(905, 658);
-            this.groupBox2.TabIndex = 5;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Результаты симуляций";
-            // 
             // RepeatButton
             // 
             this.RepeatButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.RepeatButton.Location = new System.Drawing.Point(752, 613);
+            this.RepeatButton.Location = new System.Drawing.Point(966, 791);
             this.RepeatButton.Name = "RepeatButton";
             this.RepeatButton.Size = new System.Drawing.Size(147, 39);
             this.RepeatButton.TabIndex = 1;
@@ -234,6 +251,14 @@
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Info;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.num_column,
@@ -243,68 +268,29 @@
             this.customerNumColumn,
             this.totalIncomeColumn,
             this.averageCheckColumn});
-            this.dataGridView1.Location = new System.Drawing.Point(3, 21);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridView1.Location = new System.Drawing.Point(9, 36);
+            this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(896, 573);
+            this.dataGridView1.Size = new System.Drawing.Size(1248, 749);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tabControl1.ItemSize = new System.Drawing.Size(2, 3);
-            this.tabControl1.Location = new System.Drawing.Point(-1, 12);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1069, 700);
-            this.tabControl1.TabIndex = 5;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.BackColor = System.Drawing.Color.White;
-            this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tabPage1.Location = new System.Drawing.Point(4, 7);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1061, 689);
-            this.tabPage1.TabIndex = 0;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.BackColor = System.Drawing.Color.White;
-            this.tabPage2.Controls.Add(this.groupBox3);
-            this.tabPage2.Location = new System.Drawing.Point(4, 7);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1061, 706);
-            this.tabPage2.TabIndex = 1;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.groupBox3.Controls.Add(this.stopButton);
-            this.groupBox3.Controls.Add(this.pictureBox1);
-            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox3.Location = new System.Drawing.Point(75, 19);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(914, 645);
-            this.groupBox3.TabIndex = 3;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Симуляция";
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.BackColor = System.Drawing.Color.White;
-            this.tabPage3.Controls.Add(this.groupBox2);
-            this.tabPage3.Location = new System.Drawing.Point(4, 7);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1061, 689);
-            this.tabPage3.TabIndex = 2;
             // 
             // num_column
             // 
@@ -356,38 +342,120 @@
             this.averageCheckColumn.Name = "averageCheckColumn";
             this.averageCheckColumn.ReadOnly = true;
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tabControl1.ItemSize = new System.Drawing.Size(2, 3);
+            this.tabControl1.Location = new System.Drawing.Point(-1, -3);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(1273, 864);
+            this.tabControl1.TabIndex = 5;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.Color.White;
+            this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tabPage1.Location = new System.Drawing.Point(4, 7);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1265, 853);
+            this.tabPage1.TabIndex = 0;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.BackColor = System.Drawing.Color.White;
+            this.tabPage2.Controls.Add(this.label1);
+            this.tabPage2.Controls.Add(this.pictureBox1);
+            this.tabPage2.Controls.Add(this.stopButton);
+            this.tabPage2.Location = new System.Drawing.Point(4, 7);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1265, 853);
+            this.tabPage2.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(567, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(117, 24);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Симуляция";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.SystemColors.Info;
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Location = new System.Drawing.Point(8, 47);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(1250, 750);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseClick);
+            // 
+            // stopButton
+            // 
+            this.stopButton.Location = new System.Drawing.Point(589, 801);
+            this.stopButton.Margin = new System.Windows.Forms.Padding(2);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(150, 50);
+            this.stopButton.TabIndex = 2;
+            this.stopButton.Text = "Стоп";
+            this.stopButton.UseVisualStyleBackColor = true;
+            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.White;
+            this.tabPage3.Controls.Add(this.dataGridView1);
+            this.tabPage3.Controls.Add(this.RepeatButton);
+            this.tabPage3.Location = new System.Drawing.Point(4, 7);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(1265, 853);
+            this.tabPage3.TabIndex = 2;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1068, 708);
+            this.ClientSize = new System.Drawing.Size(1272, 861);
             this.Controls.Add(this.tabControl1);
             this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1288, 900);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(1288, 900);
             this.Name = "MainForm";
             this.Text = "Симулятор работы магазина";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.maxFrequencytrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.minFrequencytrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer2;
-        private System.Windows.Forms.Button stopButton;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ComboBox numOfCashDeskComboBox;
@@ -396,7 +464,6 @@
         private System.Windows.Forms.Label numOfCashDesksLabel;
         private System.Windows.Forms.Label numOfShelvesLabel;
         private System.Windows.Forms.Label cashierSpeedLabel;
-        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage3;
@@ -404,7 +471,6 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button RepeatButton;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.DataGridViewTextBoxColumn num_column;
         private System.Windows.Forms.DataGridViewTextBoxColumn timeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
@@ -412,5 +478,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn customerNumColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn totalIncomeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn averageCheckColumn;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button stopButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TrackBar minFrequencytrackBar;
+        private System.Windows.Forms.Label minFrequencyLabel;
+        private System.Windows.Forms.Label maxFrequencyLabel;
+        private System.Windows.Forms.TrackBar maxFrequencytrackBar;
     }
 }

@@ -11,7 +11,7 @@ namespace Praktika2023
 
     internal class ProductShelf
     {
-        public static int MaxCustomers = 6;
+        public static int MaxCustomers = 10;
         private Color color;
         public Color Color
         {

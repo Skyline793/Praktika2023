@@ -14,7 +14,7 @@ namespace Praktika2023
 
     public partial class MainForm : Form
     {
-        public static int DXY = 5;
+        public static int DXY = 7;
         public static bool simulation;
         private int numOfCashDesks;
         private int numOfShelves;
@@ -47,11 +47,17 @@ namespace Praktika2023
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-
+            
             this.pictureBox1.Invalidate();
             this.supermarket.PickingUp();
             this.supermarket.Shoppings();
             this.supermarket.TopUpTheShelves();
+            if (this.supermarket.IsOverFull())
+            {
+                stopButton_Click(sender, e);
+                MessageBox.Show("Ой-ой, кажется, магазин оказался перегружен! На этом симуляцию придется остановить. Попробуйте снова c другими параметрами!", "Магазин переполнен!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+                
             
 
         }
@@ -63,8 +69,7 @@ namespace Praktika2023
                 {
                     supermarket.Customers.RemoveAt(i);
                 }
-            int min = 5 - this.numOfCashDesks-this.numOfShelves/2;
-            timer2.Interval = Randomizer.Rand(min,10) * 1000;
+            timer2.Interval = Randomizer.Rand(this.maxFrequencytrackBar.Value, this.maxFrequencytrackBar.Value) * 1000;
             this.supermarket.AddCustomer();
         }
 
@@ -149,6 +154,24 @@ namespace Praktika2023
             this.numOfShelvesComboBox.SelectedIndex = 0;
             this.cashierSpeedComboBox.SelectedIndex = 0;
             this.tabControl1.SelectedIndex = 0;
+            this.minFrequencyLabel.Text = String.Format("Выберите минимальную частоту появления нового покупателя: {0} c", minFrequencytrackBar.Value);
+            this.maxFrequencyLabel.Text = String.Format("Выберите максимальную частоту появления нового покупателя: {0} c", maxFrequencytrackBar.Value);
+            this.minFrequencytrackBar.Minimum=minFrequencytrackBar.Value;
+            this.maxFrequencytrackBar.Maximum += minFrequencytrackBar.Value;
+        }
+
+        private void minFrequencytrackBar_Scroll(object sender, EventArgs e)
+        {
+            this.minFrequencyLabel.Text = String.Format("Выберите минимальную частоту появления нового покупателя: {0} c", minFrequencytrackBar.Value);
+            this.maxFrequencytrackBar.Minimum = minFrequencytrackBar.Value;
+            this.maxFrequencytrackBar.Value = maxFrequencytrackBar.Minimum;
+            this.maxFrequencyLabel.Text = String.Format("Выберите максимальную частоту появления нового покупателя: {0} c", maxFrequencytrackBar.Value);
+            this.maxFrequencytrackBar.Maximum = 10+ minFrequencytrackBar.Value;
+        }
+
+        private void maxFrequencytrackBar_Scroll(object sender, EventArgs e)
+        {
+            this.maxFrequencyLabel.Text = String.Format("Выберите максимальную частоту появления нового покупателя: {0} c", maxFrequencytrackBar.Value);
         }
 
         private void RepeatButton_Click(object sender, EventArgs e)
