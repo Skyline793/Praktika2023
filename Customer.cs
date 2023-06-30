@@ -363,7 +363,7 @@ namespace Praktika2023
 
         public override string ToString()
         {
-            string info = String.Format("Покупатель №{0}\nВозраст: {1}\nБаланс кошелька: {2} руб.\nКорзина\nКоличество съедобных товаров: {3}\nКоличество несъедобных товаров: {4}",
+            string info = String.Format("Покупатель №{0}\nВозраст: {1}\nБаланс кошелька: {2} руб.\nКорзина:\nКоличество пищевых продуктов: {3}\nКоличество хозяйственных товаров: {4}",
                 Convert.ToString(this.Id), Convert.ToString(this.age), Convert.ToString(this.money), Convert.ToString(this.ShoppingList[ProductType.food]),
                 Convert.ToString(this.ShoppingList[ProductType.goods]));
             return info;

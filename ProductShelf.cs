@@ -97,7 +97,7 @@ namespace Praktika2023
 
         public override string ToString()
         {
-            string info = String.Format("Товарная полка\nЗапас съедобных товаров: {0} шт.\nЗапас несъедобных товаров: {1} шт.", Convert.ToString(this.foodShelf.Count), Convert.ToString(this.goodsShelf.Count));
+            string info = String.Format("Товарная полка\nЗапас пищевых продуктов: {0} шт.\nЗапас хозяйственных товаров: {1} шт.", Convert.ToString(this.foodShelf.Count), Convert.ToString(this.goodsShelf.Count));
             return info;
         }
 

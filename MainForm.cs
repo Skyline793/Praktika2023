@@ -37,7 +37,7 @@ namespace Praktika2023
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            
+
             if (supermarket != null)
             {
                 DrawObjects(e.Graphics);
@@ -47,7 +47,7 @@ namespace Praktika2023
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            
+
             this.pictureBox1.Invalidate();
             this.supermarket.PickingUp();
             this.supermarket.Shoppings();
@@ -57,8 +57,8 @@ namespace Praktika2023
                 stopButton_Click(sender, e);
                 MessageBox.Show("Ой-ой, кажется, магазин оказался перегружен! На этом симуляцию придется остановить. Попробуйте снова c другими параметрами!", "Магазин переполнен!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-                
-            
+
+
 
         }
 
@@ -79,20 +79,20 @@ namespace Praktika2023
             string elapsedTime = String.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
             string DesksShelves = String.Format("{0}/{1}", this.numOfCashDesks, this.numOfShelves);
             double speed = this.cashiersSpeed / 1000.0;
-            int totalIncome=supermarket.TotalIncome;
-            int averageCheck=supermarket.AverageCheck;
-            this.dataGridView1.Rows.Add(Convert.ToString(simulationCount), elapsedTime, DesksShelves, Convert.ToString(speed), 
+            int totalIncome = supermarket.TotalIncome;
+            int averageCheck = supermarket.AverageCheck;
+            this.dataGridView1.Rows.Add(Convert.ToString(simulationCount), elapsedTime, DesksShelves, Convert.ToString(speed),
                 Convert.ToString(supermarket.ServedCustomers), Convert.ToString(totalIncome), Convert.ToString(averageCheck));
             StopSimulation();
             this.tabControl1.SelectedIndex = 2;
-    
+
         }
 
         private void startButton_Click(object sender, EventArgs e)
         {
             this.tabControl1.SelectedIndex = 1;
             numOfCashDesks = Convert.ToInt32(this.numOfCashDeskComboBox.SelectedItem);
-            cashiersSpeed = (int)(Convert.ToDouble(this.cashierSpeedComboBox.SelectedItem)*1000);
+            cashiersSpeed = (int)(Convert.ToDouble(this.cashierSpeedComboBox.SelectedItem) * 1000);
             numOfShelves = Convert.ToInt32(this.numOfShelvesComboBox.SelectedItem);
             timer2.Interval = 10000;
             supermarket = new Supermarket(numOfCashDesks, numOfShelves, cashiersSpeed, pictureBox1.Size, warehouse, entrance, exit);
@@ -101,11 +101,11 @@ namespace Praktika2023
             timer2.Start();
             simulation = true;
             simulationCount++;
-            new ToolTip().Show("Это касса\nКликните по ней, чтобы узнать,\n сколько в ней денег", this.pictureBox1, supermarket.Desks[0].Form.X - MainForm.DXY * 5, supermarket.Desks[0].Form.Bottom, 10000);
+            new ToolTip().Show("Это касса\nКликните по ней, чтобы узнать\nколичество обслуженных покупателей\nи собранную сумму", this.pictureBox1, supermarket.Desks[0].Form.X - MainForm.DXY * 5, supermarket.Desks[0].Form.Bottom, 10000);
             new ToolTip().Show("Это кассир\nКликните, чтобы узнать\nскорость сканирования", this.pictureBox1, supermarket.Cashiers[0].Body.Right, supermarket.Cashiers[0].Body.Top - MainForm.DXY * 4, 10000);
             new ToolTip().Show("Это полка с товарами\nКликните по ней, чтобы узнать,\nсколько в ней товаров", this.pictureBox1, supermarket.Shelves[0].Form.Right, supermarket.Shelves[0].Form.Top, 10000);
-            new ToolTip().Show("Это вход. Отсюда заходят покупатели\nКликните на покупателя, чтобы узнать\nего возраст, список покупок и баланс", this.pictureBox1, this.entrance.X, this.entrance.Top - MainForm.DXY * 15, 10000);
-            new ToolTip().Show("Это дверь на склад\nКогда на полках мало товаров,\nотсюда выходит менеджер\n и пополняет их", this.pictureBox1, this.warehouse.X-this.warehouse.Width, this.warehouse.Top-MainForm.DXY*15, 10000);
+            new ToolTip().Show("Это вход. Отсюда заходят покупатели\nКликните на покупателя, чтобы узнать\nего возраст, список покупок и баланс", this.pictureBox1, this.entrance.X, this.entrance.Top - MainForm.DXY * 10, 10000);
+            new ToolTip().Show("Это дверь на склад\nКогда на полках мало товаров,\nотсюда выходит менеджер\n и пополняет их", this.pictureBox1, this.warehouse.X - this.warehouse.Width, this.warehouse.Top - MainForm.DXY * 10, 10000);
         }
 
         private void DrawObjects(Graphics g)
@@ -119,10 +119,10 @@ namespace Praktika2023
             foreach (ProductShelf shelf in supermarket.Shelves)
                 g.FillRectangle(new SolidBrush(shelf.Color), shelf.Form);
             g.FillEllipse(new SolidBrush(supermarket.Manager.Color), supermarket.Manager.Body);
-            g.FillPie(new SolidBrush(Color.Brown), entrance, 180, 180);
-            g.FillRectangle(new SolidBrush(Color.Brown), exit);
-            g.DrawString("ВХОД", new Font("Arial", 14), new SolidBrush(Color.Black), this.pictureBox1.Width / 2 - 40, entrance.Top);
-            g.DrawString("ВЫХОД", new Font("Arial", 14), new SolidBrush(Color.Black), exit.Left, exit.Bottom - exit.Height/2);
+            g.FillPie(new SolidBrush(Color.SlateGray), entrance, 180, 180);
+            g.FillRectangle(new SolidBrush(Color.SlateGray), exit);
+            g.DrawString("ВХОД", new Font(FontFamily.GenericSansSerif, 16, FontStyle.Bold), new SolidBrush(Color.LightGreen), this.pictureBox1.Width / 2 - MainForm.DXY * 5, entrance.Top + MainForm.DXY * 5);
+            g.DrawString("ВЫХОД", new Font(FontFamily.GenericSansSerif, 16, FontStyle.Bold), new SolidBrush(Color.LightGreen), exit.Left + exit.Width / 2 - MainForm.DXY * 6, exit.Bottom - exit.Height / 2 + MainForm.DXY);
             g.FillRectangle(new SolidBrush((Color.Black)), warehouse);
         }
 
@@ -139,13 +139,14 @@ namespace Praktika2023
             }
             supermarket = null;
             this.pictureBox1.Invalidate();
-            
+
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (supermarket != null)
                 StopSimulation();
+            Application.Exit();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -156,7 +157,7 @@ namespace Praktika2023
             this.tabControl1.SelectedIndex = 0;
             this.minFrequencyLabel.Text = String.Format("Выберите минимальную частоту появления нового покупателя: {0} c", minFrequencytrackBar.Value);
             this.maxFrequencyLabel.Text = String.Format("Выберите максимальную частоту появления нового покупателя: {0} c", maxFrequencytrackBar.Value);
-            this.minFrequencytrackBar.Minimum=minFrequencytrackBar.Value;
+            this.minFrequencytrackBar.Minimum = minFrequencytrackBar.Value;
             this.maxFrequencytrackBar.Maximum += minFrequencytrackBar.Value;
         }
 
@@ -166,12 +167,17 @@ namespace Praktika2023
             this.maxFrequencytrackBar.Minimum = minFrequencytrackBar.Value;
             this.maxFrequencytrackBar.Value = maxFrequencytrackBar.Minimum;
             this.maxFrequencyLabel.Text = String.Format("Выберите максимальную частоту появления нового покупателя: {0} c", maxFrequencytrackBar.Value);
-            this.maxFrequencytrackBar.Maximum = 10+ minFrequencytrackBar.Value;
+            this.maxFrequencytrackBar.Maximum = 10 + minFrequencytrackBar.Value;
         }
 
         private void maxFrequencytrackBar_Scroll(object sender, EventArgs e)
         {
             this.maxFrequencyLabel.Text = String.Format("Выберите максимальную частоту появления нового покупателя: {0} c", maxFrequencytrackBar.Value);
+        }
+
+        private void ResultsButton_Click(object sender, EventArgs e)
+        {
+            this.tabControl1.SelectedIndex = 2;
         }
 
         private void RepeatButton_Click(object sender, EventArgs e)
@@ -188,9 +194,9 @@ namespace Praktika2023
                     toolTip.Show(desk.ToString(), this.pictureBox1, desk.Form.Right, desk.Form.Top, 2000);
                 }
             }
-            foreach(var shelf in supermarket.Shelves)
+            foreach (var shelf in supermarket.Shelves)
             {
-                if(shelf.Form.Contains(e.Location))
+                if (shelf.Form.Contains(e.Location))
                 {
                     toolTip.Show(shelf.ToString(), this.pictureBox1, shelf.Form.Right, shelf.Form.Top, 2000);
                 }
@@ -202,7 +208,7 @@ namespace Praktika2023
                     toolTip.Show(customer.ToString(), this.pictureBox1, customer.Body.Right, customer.Body.Top, 2000);
                 }
             }
-            foreach(var cashier in supermarket.Cashiers)
+            foreach (var cashier in supermarket.Cashiers)
             {
                 if (cashier.Body.Contains(e.Location))
                 {

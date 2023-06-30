@@ -49,6 +49,12 @@
     <Compile Include="CashDesk.cs" />
     <Compile Include="Cashier.cs" />
     <Compile Include="Customer.cs" />
+    <Compile Include="IntroForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IntroForm.Designer.cs">
+      <DependentUpon>IntroForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +70,9 @@
     <Compile Include="Randomizer.cs" />
     <Compile Include="ShoppingCart.cs" />
     <Compile Include="Supermarket.cs" />
+    <EmbeddedResource Include="IntroForm.resx">
+      <DependentUpon>IntroForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -75,6 +84,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -88,6 +98,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fon1.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

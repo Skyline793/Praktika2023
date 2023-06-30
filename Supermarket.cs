@@ -119,9 +119,9 @@ namespace Praktika2023
             for (int i = 0; i < countOfShelves; i++)
             {
                 if (i == 0)
-                    shelves.Add(new ProductShelf(new Point(0, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 30), Color.Brown, 1, 70, 70));
+                    shelves.Add(new ProductShelf(new Point(0, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 25), Color.DarkGoldenrod, 1, 70, 70));
                 if (i == 1)
-                    shelves.Add(new ProductShelf(new Point(sizeOfScene.Width - MainForm.DXY * 10, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 30), Color.Brown, 2, 70, 70));
+                    shelves.Add(new ProductShelf(new Point(sizeOfScene.Width - MainForm.DXY * 10, sceneSize.Height / 2), new Size(MainForm.DXY * 10, MainForm.DXY * 25), Color.DarkGoldenrod, 2, 70, 70));
             }
             this.customers = new List<Customer>();
             this.manager = new Manager(new Point(warehouseDoor.X, warehouseDoor.Bottom), new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Red, 1);

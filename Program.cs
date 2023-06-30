@@ -16,7 +16,7 @@ namespace Praktika2023
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new IntroForm());
         }
     }
 }

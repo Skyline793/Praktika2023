@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Praktika2023
 {
-    internal abstract class Person
+    internal abstract class Person //абстрактый класс человек
     {
-        protected int Id;
-        protected int age;
+        protected int Id; //идентификатор
+        protected int age; //возраст
         public int Age
         {
             get { return age; }
