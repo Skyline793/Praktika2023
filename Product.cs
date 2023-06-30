@@ -48,7 +48,7 @@ namespace Praktika2023
                         this.price = 249;
                     break;
                 case PriceSegment.low:
-                        this.price = 59;
+                        this.price = 49;
                     break;
             }
             if (this.type == ProductType.goods)

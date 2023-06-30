@@ -97,7 +97,34 @@ namespace Praktika2023
 
         public override string ToString()
         {
-            string info = String.Format("Товарная полка\nЗапас пищевых продуктов: {0} шт.\nЗапас хозяйственных товаров: {1} шт.", Convert.ToString(this.foodShelf.Count), Convert.ToString(this.goodsShelf.Count));
+            int lowfood = 0,
+                mediumfood = 0,
+                premfood = 0,
+                lowgoods = 0,
+                mediumgoods = 0,
+                premgoods = 0;
+            foreach(var food in this.foodShelf)
+            {
+                if(food.PriceSegment==PriceSegment.low)
+                    lowfood++;
+                if(food.PriceSegment==PriceSegment.medium)
+                    mediumfood++;
+                if(food.PriceSegment==PriceSegment.premium)
+                    premfood++;
+            }
+            foreach (var food in this.goodsShelf)
+            {
+                if (food.PriceSegment == PriceSegment.low)
+                    lowgoods++;
+                if (food.PriceSegment == PriceSegment.medium)
+                    mediumgoods++;
+                if (food.PriceSegment == PriceSegment.premium)
+                    premgoods++;
+            }
+            string info = String.Format("Товарная полка\nЗапас пищевых продуктов: {0} шт.\nДешевых (49 руб): {1}\nБюджетных (249 руб): {2}\nПремиальных (449 руб): {3}" +
+                "\nЗапас хозяйственных товаров: {4} шт.\nДешевых (99 руб): {5}\nБюджетных (399 руб): {6}\nПремиальных (599 руб): {7}", Convert.ToString(this.foodShelf.Count),
+                lowfood, mediumfood, premfood, Convert.ToString(this.goodsShelf.Count), lowgoods, mediumgoods, premgoods);
+
             return info;
         }
 

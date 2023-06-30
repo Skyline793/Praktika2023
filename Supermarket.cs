@@ -90,9 +90,9 @@ namespace Praktika2023
             {
                 if (i == 0)
                 {
-                    if(countOfDesks == 1)
+                    if (countOfDesks == 1)
                         desks.Add(new CashDesk(new Point(sceneSize.Width / 2, MainForm.DXY * 20), new Size(MainForm.DXY * 8, MainForm.DXY * 12), Color.Gray));
-                    else if(countOfDesks ==2)
+                    else if (countOfDesks == 2)
                         desks.Add(new CashDesk(new Point(sceneSize.Width / 3, MainForm.DXY * 20), new Size(MainForm.DXY * 8, MainForm.DXY * 12), Color.Gray));
                     else
                         desks.Add(new CashDesk(new Point(sceneSize.Width / 5, MainForm.DXY * 20), new Size(MainForm.DXY * 8, MainForm.DXY * 12), Color.Gray));
@@ -101,7 +101,7 @@ namespace Praktika2023
                 }
                 if (i == 1)
                 {
-                    if(countOfDesks==2)
+                    if (countOfDesks == 2)
                         desks.Add(new CashDesk(new Point(sceneSize.Width - sceneSize.Width / 3, MainForm.DXY * 20), new Size(MainForm.DXY * 8, MainForm.DXY * 12), Color.Gray));
                     else
                         desks.Add(new CashDesk(new Point(sceneSize.Width / 2, MainForm.DXY * 20), new Size(MainForm.DXY * 8, MainForm.DXY * 12), Color.Gray));
@@ -136,7 +136,7 @@ namespace Praktika2023
                 return;
             if (shelves.Count == 2 && shelves[0].Queue.Count == ProductShelf.MaxCustomers && shelves[1].Queue.Count == ProductShelf.MaxCustomers)
                 return;
-            Point start = new Point(this.entranceDoor.Left+this.entranceDoor.Width/2-MainForm.DXY*2, this.entranceDoor.Top);
+            Point start = new Point(this.entranceDoor.Left + this.entranceDoor.Width / 2 - MainForm.DXY * 2, this.entranceDoor.Top);
             Customer newCustomer = new Customer(start, new Size(MainForm.DXY * 4, MainForm.DXY * 4), Color.Green, ++countOfCustomers);
             customers.Add(newCustomer);
             if (shelves.Count == 1)
@@ -249,9 +249,16 @@ namespace Praktika2023
             if (this.manager.Status == ManagerStatus.available)
                 foreach (ProductShelf shelf in shelves)
                 {
-                    if ((shelf.FoodShelf.Count < 50 && shelf.GoodsShelf.Count < 50) || shelf.FoodShelf.Count<25 || shelf.GoodsShelf.Count<25)
+                    if ((shelf.FoodShelf.Count < 50 && shelf.GoodsShelf.Count < 50) || shelf.FoodShelf.Count < 25 || shelf.GoodsShelf.Count < 25)
                     {
-                        this.manager.TopUpTheShelf(shelf);
+                        if (shelf.FoodShelf.Count < 25 && shelf.GoodsShelf.Count >= 25)
+                            this.manager.TopUpTheShelf(shelf, 50, 30);
+                        else if (shelf.GoodsShelf.Count < 25 && shelf.FoodShelf.Count >= 25)
+                            this.Manager.TopUpTheShelf(shelf, 30, 50);
+                        else if (shelf.FoodShelf.Count < 25 && shelf.GoodsShelf.Count < 25)
+                            this.manager.TopUpTheShelf(shelf, 50, 50);
+                        else
+                            this.manager.TopUpTheShelf(shelf, 30, 30);
                         break;
                     }
                 }
@@ -260,12 +267,12 @@ namespace Praktika2023
         public bool IsOverFull()
         {
             bool overfull = true;
-            foreach(var shelf in shelves)
-                if(shelf.Queue.Count < ProductShelf.MaxCustomers)
+            foreach (var shelf in shelves)
+                if (shelf.Queue.Count < ProductShelf.MaxCustomers)
                     overfull = false;
-            foreach(var desk in desks)
-                if(desk.Queue.Count < CashDesk.MaxCustomers)
-                    overfull=false;
+            foreach (var desk in desks)
+                if (desk.Queue.Count < CashDesk.MaxCustomers)
+                    overfull = false;
             return overfull;
         }
     }

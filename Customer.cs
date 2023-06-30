@@ -53,7 +53,7 @@ namespace Praktika2023
             this.age = Randomizer.Rand(10, 85);
             if (this.age < 18)
             {
-                this.money = Randomizer.Rand(100, 1000);
+                this.money = Randomizer.Rand(150, 1500);
                 this.speed = 10;
             }
             else if (this.age < 60)

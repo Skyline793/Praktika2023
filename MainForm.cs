@@ -103,7 +103,7 @@ namespace Praktika2023
             simulationCount++;
             new ToolTip().Show("Это касса\nКликните по ней, чтобы узнать\nколичество обслуженных покупателей\nи собранную сумму", this.pictureBox1, supermarket.Desks[0].Form.X - MainForm.DXY * 5, supermarket.Desks[0].Form.Bottom, 10000);
             new ToolTip().Show("Это кассир\nКликните, чтобы узнать\nскорость сканирования", this.pictureBox1, supermarket.Cashiers[0].Body.Right, supermarket.Cashiers[0].Body.Top - MainForm.DXY * 4, 10000);
-            new ToolTip().Show("Это полка с товарами\nКликните по ней, чтобы узнать,\nсколько в ней товаров", this.pictureBox1, supermarket.Shelves[0].Form.Right, supermarket.Shelves[0].Form.Top, 10000);
+            new ToolTip().Show("Это полка с товарами\nКликните по ней, чтобы узнать,\nсколько в ней разных товаров и их цену", this.pictureBox1, supermarket.Shelves[0].Form.Right, supermarket.Shelves[0].Form.Top, 10000);
             new ToolTip().Show("Это вход. Отсюда заходят покупатели\nКликните на покупателя, чтобы узнать\nего возраст, список покупок и баланс", this.pictureBox1, this.entrance.X, this.entrance.Top - MainForm.DXY * 10, 10000);
             new ToolTip().Show("Это дверь на склад\nКогда на полках мало товаров,\nотсюда выходит менеджер\n и пополняет их", this.pictureBox1, this.warehouse.X - this.warehouse.Width, this.warehouse.Top - MainForm.DXY * 10, 10000);
         }
@@ -137,6 +137,8 @@ namespace Praktika2023
                 if (customer.Thread != null && customer.Thread.IsAlive)
                     customer.Thread.Abort();
             }
+            if(supermarket.Manager.Thread!=null && supermarket.Manager.Thread.IsAlive)
+                supermarket.Manager.Thread.Abort();
             supermarket = null;
             this.pictureBox1.Invalidate();
 
@@ -198,14 +200,14 @@ namespace Praktika2023
             {
                 if (shelf.Form.Contains(e.Location))
                 {
-                    toolTip.Show(shelf.ToString(), this.pictureBox1, shelf.Form.Right, shelf.Form.Top, 2000);
+                    toolTip.Show(shelf.ToString(), this.pictureBox1, shelf.Form.Right, shelf.Form.Top, 6000);
                 }
             }
             foreach (var customer in supermarket.Customers)
             {
                 if (customer.Body.Contains(e.Location))
                 {
-                    toolTip.Show(customer.ToString(), this.pictureBox1, customer.Body.Right, customer.Body.Top, 2000);
+                    toolTip.Show(customer.ToString(), this.pictureBox1, customer.Body.Right, customer.Body.Top, 3000);
                 }
             }
             foreach (var cashier in supermarket.Cashiers)
@@ -215,6 +217,8 @@ namespace Praktika2023
                     toolTip.Show(cashier.ToString(), this.pictureBox1, cashier.Body.Right, cashier.Body.Top, 2000);
                 }
             }
+            if (supermarket.Manager.Body.Contains(e.Location))
+                toolTip.Show(supermarket.Manager.ToString(), this.pictureBox1, supermarket.Manager.Body.Right, supermarket.Manager.Body.Top, 2000);
         }
     }
 }
