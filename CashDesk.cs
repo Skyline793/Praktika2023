@@ -20,6 +20,12 @@ namespace Praktika2023
     internal class CashDesk
     {
         public static int MaxCustomers = 7;
+        private Thread thread;
+        public Thread Thread
+        {
+            get { return thread; }
+            set { thread = value; }
+        }
         private int deskAverageCheck;
         public int DeskAverageCheck
         {
@@ -111,7 +117,7 @@ namespace Praktika2023
         public void AddCustomerToQueue(Customer customer)
         {
             this.queue.Enqueue(customer);
-            customer.MoveTo(this);
+            customer.MoveToCashDesk(this);
 
         }
 
@@ -122,7 +128,7 @@ namespace Praktika2023
             {
                 if (this.queue.ElementAt(i).Thread.IsAlive == true)
                     this.queue.ElementAt(i).Thread.Abort();
-                this.queue.ElementAt(i).MoveTo(this);
+                this.queue.ElementAt(i).MoveToCashDesk(this);
             }
         }
 

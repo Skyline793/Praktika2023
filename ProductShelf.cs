@@ -12,6 +12,12 @@ namespace Praktika2023
     internal class ProductShelf
     {
         public static int MaxCustomers = 10;
+        private Thread thread;
+        public Thread Thread
+        {
+            get { return thread; }
+            set { thread = value; }
+        }
         private Color color;
         public Color Color
         {
@@ -81,7 +87,7 @@ namespace Praktika2023
         public void AddCustomerToQueue(Customer customer)
         {
             this.queue.Enqueue(customer);
-                customer.MoveTo(this); 
+                customer.MoveToShelf(this); 
             
         }
 
@@ -91,7 +97,7 @@ namespace Praktika2023
             {
                 if (this.Queue.ElementAt(i).Thread.IsAlive == true)
                     this.Queue.ElementAt(i).Thread.Abort();
-                this.Queue.ElementAt(i).MoveTo(this);
+                this.Queue.ElementAt(i).MoveToShelf(this);
             }
         }
 

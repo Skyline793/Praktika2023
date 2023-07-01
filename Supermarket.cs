@@ -183,14 +183,14 @@ namespace Praktika2023
                     desk.Status = DeskStatus.busy;
                     int check = 0;
                     Customer customer = desk.Queue.Peek();
-                    Task task = new Task(async () =>
+                    desk.Thread = new Thread(() =>
                     {
                         int countOfProducts = customer.ShoppingList[ProductType.food] + customer.ShoppingList[ProductType.goods];
                         for (int i = 0; i < countOfProducts; i++)
                         {
                             check += desk.Cashier.ScanProduct(customer);
                         }
-                        await Task.Delay(desk.Cashier.ScanSpeed * countOfProducts);
+                        Thread.Sleep(desk.Cashier.ScanSpeed * countOfProducts);
                         if (customer.Age >= 60)
                         {
                             check = check - (check * 5 / 100);
@@ -198,14 +198,11 @@ namespace Praktika2023
                         desk.Checks.Add(check);
                         customer.MakePayment(check);
                         desk.Queue.Dequeue();
-                        if (MainForm.simulation)
-                        {
-                            customer.MoveTo(this.exitDoor);
+                            customer.MoveToExit(this.exitDoor);
                             desk.UpdateQueue();
-                        }
                         desk.Status = DeskStatus.open;
                     });
-                    task.Start();
+                    desk.Thread.Start();
                 }
             }
         }
@@ -218,10 +215,10 @@ namespace Praktika2023
                 {
                     Customer customer = shelf.Queue.Peek();
                     customer.Status = CustomerStatus.staying;
-                    Task task = new Task(async () =>
+                    shelf.Thread = new Thread(() =>
                     {
                         customer.FillTheCart(shelf);
-                        await Task.Delay(customer.ShoppingCart.Count * 1000);
+                        Thread.Sleep(customer.ShoppingCart.Count * 1000);
                         bool canGo = false;
                         while (!canGo)
                         {
@@ -233,13 +230,10 @@ namespace Praktika2023
                                 canGo = true;
                         }
                         shelf.Queue.Dequeue();
-                        if (MainForm.simulation)
-                        {
                             this.SendCustomerToCashDesk(customer);
                             shelf.UpdateQueue();
-                        }
                     });
-                    task.Start();
+                    shelf.Thread.Start();
                 }
             }
         }

@@ -15,7 +15,7 @@ namespace Praktika2023
     public partial class MainForm : Form
     {
         public static int DXY = 7;
-        public static bool simulation;
+        public bool simulationPaused;
         private int numOfCashDesks;
         private int numOfShelves;
         private int simulationCount;
@@ -31,7 +31,6 @@ namespace Praktika2023
             entrance = new Rectangle(this.pictureBox1.Width / 2 - MainForm.DXY * 15, this.pictureBox1.Height - MainForm.DXY * 10, MainForm.DXY * 30, MainForm.DXY * 20);
             warehouse = new Rectangle(this.pictureBox1.Width / 4, this.pictureBox1.Height - MainForm.DXY * 2, MainForm.DXY * 10, MainForm.DXY * 2);
             stopwatch = new Stopwatch();
-            simulation = false;
             simulationCount = 0;
         }
 
@@ -99,7 +98,7 @@ namespace Praktika2023
             stopwatch.Start();
             timer1.Start();
             timer2.Start();
-            simulation = true;
+            simulationPaused = false;
             simulationCount++;
             new ToolTip().Show("Это касса\nКликните по ней, чтобы узнать\nколичество обслуженных покупателей\nи собранную сумму", this.pictureBox1, supermarket.Desks[0].Form.X - MainForm.DXY * 5, supermarket.Desks[0].Form.Bottom, 10000);
             new ToolTip().Show("Это кассир\nКликните, чтобы узнать\nскорость сканирования", this.pictureBox1, supermarket.Cashiers[0].Body.Right, supermarket.Cashiers[0].Body.Top - MainForm.DXY * 4, 10000);
@@ -128,15 +127,20 @@ namespace Praktika2023
 
         private void StopSimulation()
         {
+            if (simulationPaused)
+                Resumebutton_Click(Owner, EventArgs.Empty);
             timer1.Stop();
             timer2.Stop();
             stopwatch.Stop();
-            simulation = false;
+            foreach (CashDesk desk in supermarket.Desks)
+                if (desk.Thread != null && desk.Thread.IsAlive)
+                    desk.Thread.Abort();
+            foreach (ProductShelf shelf in supermarket.Shelves)
+                if (shelf.Thread != null && shelf.Thread.IsAlive)
+                    shelf.Thread.Abort();
             foreach (Customer customer in supermarket.Customers)
-            {
                 if (customer.Thread != null && customer.Thread.IsAlive)
                     customer.Thread.Abort();
-            }
             if(supermarket.Manager.Thread!=null && supermarket.Manager.Thread.IsAlive)
                 supermarket.Manager.Thread.Abort();
             supermarket = null;
@@ -180,6 +184,46 @@ namespace Praktika2023
         private void ResultsButton_Click(object sender, EventArgs e)
         {
             this.tabControl1.SelectedIndex = 2;
+        }
+
+        private void Pausebutton_Click(object sender, EventArgs e)
+        {
+            this.simulationPaused = true;
+            this.Pausebutton.Enabled = false;
+            this.Resumebutton.Enabled = true;
+            timer1.Stop();
+            timer2.Stop();
+            foreach (CashDesk desk in supermarket.Desks)
+                if (desk.Thread != null && desk.Thread.IsAlive)
+                    desk.Thread.Suspend();
+            foreach (ProductShelf shelf in supermarket.Shelves)
+                if (shelf.Thread != null && shelf.Thread.IsAlive)
+                    shelf.Thread.Suspend();
+            foreach (Customer customer in supermarket.Customers)
+                if (customer.Thread != null && customer.Thread.IsAlive)
+                    customer.Thread.Suspend();
+            if (supermarket.Manager.Thread != null && supermarket.Manager.Thread.IsAlive)
+                supermarket.Manager.Thread.Suspend();
+        }
+
+        private void Resumebutton_Click(object sender, EventArgs e)
+        {
+            this.simulationPaused = false;
+            this.Pausebutton.Enabled = true;
+            this.Resumebutton.Enabled = false;
+            foreach (CashDesk desk in supermarket.Desks)
+                if (desk.Thread != null && desk.Thread.IsAlive)
+                    desk.Thread.Resume();
+            foreach (ProductShelf shelf in supermarket.Shelves)
+                if (shelf.Thread != null && shelf.Thread.IsAlive)
+                    shelf.Thread.Resume();
+            foreach (Customer customer in supermarket.Customers)
+                if (customer.Thread != null && customer.Thread.IsAlive)
+                    customer.Thread.Resume();
+            if (supermarket.Manager.Thread != null && supermarket.Manager.Thread.IsAlive)
+                supermarket.Manager.Thread.Resume();
+            timer1.Start();
+            timer2.Start();
         }
 
         private void RepeatButton_Click(object sender, EventArgs e)

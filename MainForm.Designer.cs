@@ -46,6 +46,8 @@
             this.totalIncomeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.averageCheckColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.ResultsButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -61,20 +63,20 @@
             this.numOfShelvesComboBox = new System.Windows.Forms.ComboBox();
             this.numOfCashDeskComboBox = new System.Windows.Forms.ComboBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.Resumebutton = new System.Windows.Forms.Button();
+            this.Pausebutton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.stopButton = new System.Windows.Forms.Button();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxFrequencytrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.minFrequencytrackBar)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer1
@@ -207,6 +209,29 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1273, 867);
             this.tabControl1.TabIndex = 5;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.tabPage3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.tabPage3.Controls.Add(this.label2);
+            this.tabPage3.Controls.Add(this.dataGridView1);
+            this.tabPage3.Controls.Add(this.RepeatButton);
+            this.tabPage3.Location = new System.Drawing.Point(4, 7);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(1265, 856);
+            this.tabPage3.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(480, 4);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(305, 29);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Результаты симуляций";
             // 
             // tabPage1
             // 
@@ -392,6 +417,8 @@
             this.tabPage2.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.tabPage2.BackgroundImage = global::Praktika2023.Properties.Resources.fon;
             this.tabPage2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.tabPage2.Controls.Add(this.Resumebutton);
+            this.tabPage2.Controls.Add(this.Pausebutton);
             this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Controls.Add(this.pictureBox1);
             this.tabPage2.Controls.Add(this.stopButton);
@@ -400,6 +427,29 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(1265, 856);
             this.tabPage2.TabIndex = 1;
+            // 
+            // Resumebutton
+            // 
+            this.Resumebutton.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.Resumebutton.Enabled = false;
+            this.Resumebutton.Image = global::Praktika2023.Properties.Resources.start;
+            this.Resumebutton.Location = new System.Drawing.Point(559, 803);
+            this.Resumebutton.Name = "Resumebutton";
+            this.Resumebutton.Size = new System.Drawing.Size(50, 50);
+            this.Resumebutton.TabIndex = 5;
+            this.Resumebutton.UseVisualStyleBackColor = false;
+            this.Resumebutton.Click += new System.EventHandler(this.Resumebutton_Click);
+            // 
+            // Pausebutton
+            // 
+            this.Pausebutton.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.Pausebutton.Image = global::Praktika2023.Properties.Resources.pause1;
+            this.Pausebutton.Location = new System.Drawing.Point(615, 803);
+            this.Pausebutton.Name = "Pausebutton";
+            this.Pausebutton.Size = new System.Drawing.Size(50, 50);
+            this.Pausebutton.TabIndex = 4;
+            this.Pausebutton.UseVisualStyleBackColor = false;
+            this.Pausebutton.Click += new System.EventHandler(this.Pausebutton_Click);
             // 
             // label1
             // 
@@ -428,37 +478,14 @@
             // 
             this.stopButton.BackColor = System.Drawing.Color.LightSteelBlue;
             this.stopButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.stopButton.Location = new System.Drawing.Point(557, 801);
+            this.stopButton.Image = global::Praktika2023.Properties.Resources.stop;
+            this.stopButton.Location = new System.Drawing.Point(670, 803);
             this.stopButton.Margin = new System.Windows.Forms.Padding(2);
             this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(150, 50);
+            this.stopButton.Size = new System.Drawing.Size(50, 50);
             this.stopButton.TabIndex = 2;
-            this.stopButton.Text = "Стоп";
             this.stopButton.UseVisualStyleBackColor = false;
             this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.tabPage3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.tabPage3.Controls.Add(this.label2);
-            this.tabPage3.Controls.Add(this.dataGridView1);
-            this.tabPage3.Controls.Add(this.RepeatButton);
-            this.tabPage3.Location = new System.Drawing.Point(4, 7);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1265, 856);
-            this.tabPage3.TabIndex = 2;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(480, 4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(305, 29);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Результаты симуляций";
             // 
             // MainForm
             // 
@@ -479,6 +506,8 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabControl1.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -487,8 +516,6 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -527,5 +554,7 @@
         private System.Windows.Forms.TrackBar maxFrequencytrackBar;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button ResultsButton;
+        private System.Windows.Forms.Button Resumebutton;
+        private System.Windows.Forms.Button Pausebutton;
     }
 }
