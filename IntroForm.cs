@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Praktika2023
 {
+    //Форма приветственного окна
     public partial class IntroForm : Form
     {
         public IntroForm()
@@ -17,18 +11,15 @@ namespace Praktika2023
             InitializeComponent();
         }
 
-        private void IntroForm_Load(object sender, EventArgs e)
+        //нажатие кнопки начать
+        private void Startbutton_Click(object sender, EventArgs e)
         {
-
+            MainForm mainForm = new MainForm(); //создать экземпляр главной формы
+            mainForm.Show(); //показать окно
+            this.Hide(); //скрыть привественное окно
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MainForm mainForm = new MainForm();
-            mainForm.Show();
-            this.Hide();
-        }
-
+        //нажатие кнопки выйти
         private void ExitButton_Click(object sender, EventArgs e)
         {
             Application.Exit();

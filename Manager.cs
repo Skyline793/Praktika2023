@@ -1,122 +1,154 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Drawing;
-using System.Threading.Tasks;
 
 namespace Praktika2023
 {
+    /// <summary>Перечисление для отражения статуса менеджера</summary>
     enum ManagerStatus
     {
+        /// <summary>свободен</summary>
         available,
+        /// <summary>занят</summary>
         busy
     }
 
-    internal class Manager :Person
+    /// <summary>класс Менеджер, наследуемый от Человека</summary>
+    internal class Manager : Person
     {
-        private int foodSupply;
-        private int goodsSupply;
+        /// <summary>Статус менеджера</summary>
         private ManagerStatus status;
+        /// <summary>Статус менеджера</summary>
         public ManagerStatus Status
         {
-            get { return status; }
+            get { return status; } //геттер
         }
+        /// <summary>Количество пищевых продуктов, которым менеджер пополняет полку продуктов</summary>
+        private int foodSupply;
+        /// <summary>Количество хозяйственных товаров, которым менеджер пополняет полку продуктов</summary>
+        private int goodsSupply;
+        /// <summary>Поток, в котором передвигается и пополняет запасы менеджер</summary>
         private Thread thread;
+        /// <summary>Поток, в котором передвигается и пополняет запасы менеджер</summary>
         public Thread Thread
         {
-            get { return thread; }
+            get { return thread; } //геттер
         }
-        public Manager(Point position, Size size, Color color, int ID): base(position, size, color, ID)
+
+        /// <summary>
+        /// Конструктор класса Менеджер
+        /// </summary>
+        /// <param name="position">Координата левого верхнего угла тела</param>
+        /// <param name="size">Размеры тела</param>
+        /// <param name="color">Цвет тела</param>
+        public Manager(Point position, Size size, Color color, int ID) : base(position, size, color, ID) //конструктор
         {
-            this.status = ManagerStatus.available;
+            this.status = ManagerStatus.available; //начальный статус - свободен
+            //пополнение по нулям
             this.foodSupply = 0;
             this.goodsSupply = 0;
         }
-        protected override void Move(Point Dest)
-        {
-            body = new Rectangle(Dest.X, Dest.Y, body.Width, body.Height);
-        }
 
+        /// <summary>
+        /// метод приближения к полке и пополнения запасов
+        /// </summary>
+        /// <param name="shelf">пополняемая полка</param>
+        /// <param name="foodSupply">количество пополняемых пищевых продуктов</param>
+        /// <param name="goodsSupply">количество пополняемых хозяйственных товаров</param>
         public void TopUpTheShelf(ProductShelf shelf, int foodSupply, int goodsSupply)
         {
             this.foodSupply = foodSupply;
             this.goodsSupply = goodsSupply;
-            this.status= ManagerStatus.busy;
+            this.status = ManagerStatus.busy;
+            //инициализируем поток выполнения метода
             thread = new Thread(() =>
             {
-                Point source = new Point(this.body.X, this.body.Y);
-                Point dest = new Point(shelf.Form.Left, shelf.Form.Bottom + MainForm.DXY * 2);
+                Point source = new Point(this.body.X, this.body.Y); //исходная позиция
+                Point dest = new Point(shelf.Form.Left, shelf.Form.Bottom + MainForm.DXY * 2); //точка назначения
+                //двигаемся по оси Y, пока не дойдем до нижнего края полки
                 while (this.body.Y != dest.Y)
                 {
                     if (this.body.Y < dest.Y)
                         this.Move(new Point(this.body.X, this.body.Y + 1));
                     if (this.body.Y > dest.Y)
                         this.Move(new Point(this.body.X, this.body.Y - 1));
-                    Thread.Sleep(10);
+                    Thread.Sleep(10); //пауза
                 }
+                //двигаемся по оси X, пока не дойдем до нижнего края полки
                 while (this.body.X != dest.X)
                 {
                     if (this.body.X < dest.X)
                         this.Move(new Point(this.body.X + 1, this.body.Y));
-                    if(this.body.X > dest.X)
-                        this.Move(new Point(this.body.X-1, this.body.Y));
-                    Thread.Sleep(10);
+                    if (this.body.X > dest.X)
+                        this.Move(new Point(this.body.X - 1, this.body.Y));
+                    Thread.Sleep(10); //пауза
                 }
-                
-                TopUp(shelf);
-                Thread.Sleep(10000);
+
+                TopUp(shelf); //вызов метода пополнения полки
+                Thread.Sleep(10000); //пауза
+
+                //двигаемся по оси X, пока не дойдем до позиции, откуда пришли
                 while (this.body.X != source.X)
                 {
                     if (this.body.X < source.X)
                         this.Move(new Point(this.body.X + 1, this.body.Y));
                     if (this.body.X > source.X)
                         this.Move(new Point(this.body.X - 1, this.body.Y));
-                    Thread.Sleep(10);
+                    Thread.Sleep(10); //пауза
                 }
+                //двигаемся по оси X, пока не дойдем до позиции, откуда пришли
                 while (this.body.Y != source.Y)
                 {
                     if (this.body.Y < source.Y)
                         this.Move(new Point(this.body.X, this.body.Y + 1));
                     if (this.body.Y > source.Y)
                         this.Move(new Point(this.body.X, this.body.Y - 1));
-                    Thread.Sleep(10);
+                    Thread.Sleep(10); //пауза
                 }
                 this.status = ManagerStatus.available;
             });
-            thread.Start();
+            thread.Start(); //запускаем поток
         }
 
+        /// <summary>
+        /// Непосредственно метод пополнения запасов
+        /// </summary>
+        /// <param name="shelf">пополняемая полка</param>
         private void TopUp(ProductShelf shelf)
         {
+            //пополняем секцию с едой
             for (int i = 0; i < foodSupply / 2; i++)
             {
-                shelf.FoodShelf.Add(new Product(ProductType.food, PriceSegment.low));
+                shelf.FoodSection.Add(new Product(ProductType.food, PriceSegment.low));
             }
             for (int i = 0; i < foodSupply / 3; i++)
             {
-                shelf.FoodShelf.Add(new Product(ProductType.food, PriceSegment.medium));
+                shelf.FoodSection.Add(new Product(ProductType.food, PriceSegment.medium));
             }
-            while (shelf.FoodShelf.Count < foodSupply)
+            while (shelf.FoodSection.Count < foodSupply)
             {
-                shelf.FoodShelf.Add(new Product(ProductType.food, PriceSegment.premium));
+                shelf.FoodSection.Add(new Product(ProductType.food, PriceSegment.premium));
             }
 
+            //пополняем секцию с хозтоварами
             for (int i = 0; i < goodsSupply / 2; i++)
             {
-                shelf.GoodsShelf.Add(new Product(ProductType.goods, PriceSegment.low));
+                shelf.GoodsSection.Add(new Product(ProductType.goods, PriceSegment.low));
             }
             for (int i = 0; i < goodsSupply / 3; i++)
             {
-                shelf.GoodsShelf.Add(new Product(ProductType.goods, PriceSegment.medium));
+                shelf.GoodsSection.Add(new Product(ProductType.goods, PriceSegment.medium));
             }
-            while (shelf.GoodsShelf.Count < goodsSupply)
+            while (shelf.GoodsSection.Count < goodsSupply)
             {
-                shelf.GoodsShelf.Add(new Product(ProductType.goods, PriceSegment.premium));
+                shelf.GoodsSection.Add(new Product(ProductType.goods, PriceSegment.premium));
             }
         }
 
+        /// <summary>
+        /// Метод преобразования информации о менеджере в строку
+        /// </summary>
+        /// <returns>Cтрока типа string с информацией</returns>
         public override string ToString()
         {
             string info = String.Format("Менеджер\nПополнение пищевых продуктов: {0} шт.\nПополнение хозяйственных товаров: {1} шт.", this.foodSupply, this.goodsSupply);

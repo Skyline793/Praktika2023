@@ -68,7 +68,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Randomizer.cs" />
-    <Compile Include="ShoppingCart.cs" />
     <Compile Include="Supermarket.cs" />
     <EmbeddedResource Include="IntroForm.resx">
       <DependentUpon>IntroForm.cs</DependentUpon>
@@ -104,9 +103,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\fon1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pause.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\pause1.png" />

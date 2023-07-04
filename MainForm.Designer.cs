@@ -38,16 +38,7 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.RepeatButton = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.num_column = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.timeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.customerNumColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.totalIncomeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.averageCheckColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.ResultsButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -68,15 +59,26 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.stopButton = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.Savebutton = new System.Windows.Forms.Button();
+            this.num_column = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.timeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FrequencyColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.customerNumColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.totalIncomeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.averageCheckColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxFrequencytrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.minFrequencytrackBar)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer1
@@ -120,6 +122,7 @@
             this.timeColumn,
             this.Column1,
             this.Column2,
+            this.FrequencyColumn,
             this.customerNumColumn,
             this.totalIncomeColumn,
             this.averageCheckColumn});
@@ -147,56 +150,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(1248, 764);
             this.dataGridView1.TabIndex = 0;
             // 
-            // num_column
-            // 
-            this.num_column.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.num_column.HeaderText = "№";
-            this.num_column.Name = "num_column";
-            this.num_column.ReadOnly = true;
-            this.num_column.Width = 47;
-            // 
-            // timeColumn
-            // 
-            this.timeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.timeColumn.HeaderText = "Время работы";
-            this.timeColumn.Name = "timeColumn";
-            this.timeColumn.ReadOnly = true;
-            // 
-            // Column1
-            // 
-            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column1.HeaderText = "Число касс/полок";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column2.HeaderText = "Скорость сканирования, сек. на товар";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            // 
-            // customerNumColumn
-            // 
-            this.customerNumColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.customerNumColumn.HeaderText = "Обслужено покупателей";
-            this.customerNumColumn.Name = "customerNumColumn";
-            this.customerNumColumn.ReadOnly = true;
-            // 
-            // totalIncomeColumn
-            // 
-            this.totalIncomeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.totalIncomeColumn.HeaderText = "Общий доход, руб.";
-            this.totalIncomeColumn.Name = "totalIncomeColumn";
-            this.totalIncomeColumn.ReadOnly = true;
-            // 
-            // averageCheckColumn
-            // 
-            this.averageCheckColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.averageCheckColumn.HeaderText = "Средний чек, руб.";
-            this.averageCheckColumn.Name = "averageCheckColumn";
-            this.averageCheckColumn.ReadOnly = true;
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -209,29 +162,6 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1273, 867);
             this.tabControl1.TabIndex = 5;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.tabPage3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.tabPage3.Controls.Add(this.label2);
-            this.tabPage3.Controls.Add(this.dataGridView1);
-            this.tabPage3.Controls.Add(this.RepeatButton);
-            this.tabPage3.Location = new System.Drawing.Point(4, 7);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1265, 856);
-            this.tabPage3.TabIndex = 2;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(480, 4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(305, 29);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Результаты симуляций";
             // 
             // tabPage1
             // 
@@ -454,10 +384,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(554, 3);
+            this.label1.Font = new System.Drawing.Font("Comic Sans MS", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(554, 1);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(156, 29);
+            this.label1.Size = new System.Drawing.Size(146, 35);
             this.label1.TabIndex = 3;
             this.label1.Text = "Симуляция";
             // 
@@ -487,6 +417,99 @@
             this.stopButton.UseVisualStyleBackColor = false;
             this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.tabPage3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.tabPage3.Controls.Add(this.Savebutton);
+            this.tabPage3.Controls.Add(this.label2);
+            this.tabPage3.Controls.Add(this.dataGridView1);
+            this.tabPage3.Controls.Add(this.RepeatButton);
+            this.tabPage3.Location = new System.Drawing.Point(4, 7);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(1265, 856);
+            this.tabPage3.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.label2.Font = new System.Drawing.Font("Comic Sans MS", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(480, 1);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(288, 35);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Результаты симуляций";
+            // 
+            // Savebutton
+            // 
+            this.Savebutton.BackColor = System.Drawing.Color.LightGreen;
+            this.Savebutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Savebutton.Location = new System.Drawing.Point(9, 806);
+            this.Savebutton.Name = "Savebutton";
+            this.Savebutton.Size = new System.Drawing.Size(249, 41);
+            this.Savebutton.TabIndex = 5;
+            this.Savebutton.Text = "Сохранить результаты";
+            this.Savebutton.UseVisualStyleBackColor = false;
+            this.Savebutton.Click += new System.EventHandler(this.Savebutton_Click);
+            // 
+            // num_column
+            // 
+            this.num_column.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.num_column.HeaderText = "№";
+            this.num_column.Name = "num_column";
+            this.num_column.ReadOnly = true;
+            this.num_column.Width = 47;
+            // 
+            // timeColumn
+            // 
+            this.timeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.timeColumn.HeaderText = "Время работы";
+            this.timeColumn.Name = "timeColumn";
+            this.timeColumn.ReadOnly = true;
+            // 
+            // Column1
+            // 
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column1.HeaderText = "Число касс/полок";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column2.HeaderText = "Скорость сканирования, сек. на товар";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            // 
+            // FrequencyColumn
+            // 
+            this.FrequencyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.FrequencyColumn.HeaderText = "Интервал появления покупателей, сек";
+            this.FrequencyColumn.Name = "FrequencyColumn";
+            this.FrequencyColumn.ReadOnly = true;
+            // 
+            // customerNumColumn
+            // 
+            this.customerNumColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.customerNumColumn.HeaderText = "Обслужено покупателей";
+            this.customerNumColumn.Name = "customerNumColumn";
+            this.customerNumColumn.ReadOnly = true;
+            // 
+            // totalIncomeColumn
+            // 
+            this.totalIncomeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.totalIncomeColumn.HeaderText = "Общий доход, руб.";
+            this.totalIncomeColumn.Name = "totalIncomeColumn";
+            this.totalIncomeColumn.ReadOnly = true;
+            // 
+            // averageCheckColumn
+            // 
+            this.averageCheckColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.averageCheckColumn.HeaderText = "Средний чек, руб.";
+            this.averageCheckColumn.Name = "averageCheckColumn";
+            this.averageCheckColumn.ReadOnly = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -503,11 +526,8 @@
             this.Name = "MainForm";
             this.Text = "Симулятор работы магазина";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabControl1.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -516,6 +536,8 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -538,13 +560,6 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button RepeatButton;
-        private System.Windows.Forms.DataGridViewTextBoxColumn num_column;
-        private System.Windows.Forms.DataGridViewTextBoxColumn timeColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn customerNumColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn totalIncomeColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn averageCheckColumn;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button stopButton;
         private System.Windows.Forms.Label label1;
@@ -556,5 +571,14 @@
         private System.Windows.Forms.Button ResultsButton;
         private System.Windows.Forms.Button Resumebutton;
         private System.Windows.Forms.Button Pausebutton;
+        private System.Windows.Forms.Button Savebutton;
+        private System.Windows.Forms.DataGridViewTextBoxColumn num_column;
+        private System.Windows.Forms.DataGridViewTextBoxColumn timeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FrequencyColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn customerNumColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn totalIncomeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn averageCheckColumn;
     }
 }
