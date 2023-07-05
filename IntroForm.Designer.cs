@@ -33,6 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.ExitButton = new System.Windows.Forms.Button();
+            this.authorButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -76,6 +77,17 @@
             this.ExitButton.UseVisualStyleBackColor = true;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
+            // authorButton
+            // 
+            this.authorButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.authorButton.Location = new System.Drawing.Point(867, 12);
+            this.authorButton.Name = "authorButton";
+            this.authorButton.Size = new System.Drawing.Size(85, 42);
+            this.authorButton.TabIndex = 4;
+            this.authorButton.Text = "Об авторе";
+            this.authorButton.UseVisualStyleBackColor = true;
+            this.authorButton.Click += new System.EventHandler(this.authorButton_Click);
+            // 
             // IntroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -83,6 +95,7 @@
             this.BackgroundImage = global::Praktika2023.Properties.Resources.fon;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(964, 650);
+            this.Controls.Add(this.authorButton);
             this.Controls.Add(this.ExitButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -106,5 +119,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button ExitButton;
+        private System.Windows.Forms.Button authorButton;
     }
 }

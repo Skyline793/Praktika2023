@@ -280,23 +280,37 @@ namespace Praktika2023
         /// </summary>
         public void TopUpTheShelves()
         {
-            if (this.manager.Status == ManagerStatus.available) //если менеджер свободен
-                foreach (ProductShelf shelf in shelves) //для всех полок в магазине
+            if (this.manager.Status == ManagerStatus.busy) return;  //если менеджер занят, выйти
+            int min = int.MaxValue;
+            ProductShelf shelf = null;
+            foreach (ProductShelf Shelf in shelves) //ищем полку с минимальным запасом
+            {
+                if (Shelf.FoodSection.Count + Shelf.GoodsSection.Count < min)
                 {
-                    //когда количество товаров в полке опускается до определенного уровня, отправляем к ней менеджера
-                    if ((shelf.FoodSection.Count < 50 && shelf.GoodsSection.Count < 50) || shelf.FoodSection.Count < 25 || shelf.GoodsSection.Count < 25)
-                    {
-                        if (shelf.FoodSection.Count < 25 && shelf.GoodsSection.Count >= 25)
-                            this.manager.TopUpTheShelf(shelf, 50, 30);
-                        else if (shelf.GoodsSection.Count < 25 && shelf.FoodSection.Count >= 25)
-                            this.Manager.TopUpTheShelf(shelf, 30, 50);
-                        else if (shelf.FoodSection.Count < 25 && shelf.GoodsSection.Count < 25)
-                            this.manager.TopUpTheShelf(shelf, 50, 50);
-                        else
-                            this.manager.TopUpTheShelf(shelf, 30, 30);
-                        break;
-                    }
+                    shelf = Shelf;
+                    min = Shelf.FoodSection.Count + Shelf.GoodsSection.Count;
                 }
+            }
+            //когда количество товаров в полке опускается до определенного уровня, отправляем к ней менеджера
+            if (shelf.FoodSection.Count < 50 || shelf.GoodsSection.Count < 50)
+            {
+                if (shelf.FoodSection.Count < 25 && shelf.GoodsSection.Count < 25)
+                    this.manager.TopUpTheShelf(shelf, 50, 50);
+                if (shelf.FoodSection.Count < 50 && shelf.FoodSection.Count >= 25 && shelf.GoodsSection.Count < 50 && shelf.GoodsSection.Count >= 25)
+                    this.manager.TopUpTheShelf(shelf, 30, 30);
+                else if (shelf.FoodSection.Count < 25 && shelf.GoodsSection.Count >= 50)
+                    this.manager.TopUpTheShelf(shelf, 50, 0);
+                else if (shelf.FoodSection.Count >= 25 && shelf.FoodSection.Count < 50 && shelf.GoodsSection.Count >= 50)
+                    this.manager.TopUpTheShelf(shelf, 30, 0);
+                else if (shelf.FoodSection.Count < 25 && shelf.GoodsSection.Count >= 25 && shelf.GoodsSection.Count < 50)
+                    this.manager.TopUpTheShelf(shelf, 50, 30);
+                else if (shelf.FoodSection.Count >= 50 && shelf.GoodsSection.Count < 25)
+                    this.Manager.TopUpTheShelf(shelf, 0, 50);
+                else if (shelf.FoodSection.Count >= 50 && shelf.GoodsSection.Count >= 25 && shelf.GoodsSection.Count < 50)
+                    this.Manager.TopUpTheShelf(shelf, 0, 30);
+                else if (shelf.FoodSection.Count >= 25 && shelf.FoodSection.Count < 50 && shelf.GoodsSection.Count < 25)
+                    this.Manager.TopUpTheShelf(shelf, 30, 50);
+            }
         }
 
         /// <summary>

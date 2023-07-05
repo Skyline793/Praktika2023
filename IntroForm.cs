@@ -24,5 +24,12 @@ namespace Praktika2023
         {
             Application.Exit();
         }
+
+        //нажатие кнопки об авторе
+        private void authorButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Имитационная модель работы магазина\nРазработчик: Тюкавкин И.А.," +
+                " студент группы ПИ-11\nАлтГТУ им. И.И. Ползунова, 2023", "Об авторе", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

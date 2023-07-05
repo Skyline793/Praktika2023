@@ -76,7 +76,7 @@ namespace Praktika2023
             //баланс генерируется случайно в зависимости от возраста
             if (this.age < 18)
                 this.money = Randomizer.Rand(150, 1500);
-            else if (this.age < 60)
+            else if (this.age <= 60)
                 this.money = Randomizer.Rand(600, 5000);
             else
                 this.money = Randomizer.Rand(400, 3500);
@@ -86,6 +86,12 @@ namespace Praktika2023
             this.shoppingList[ProductType.goods] = 0;
             this.shoppingCart = new Stack<Product>();
             this.status = CustomerStatus.staying;
+            //генерируем случайное количество пищевых и хозяйственных товаров в списке покупок
+            do
+            {
+                this.shoppingList[ProductType.food] = Randomizer.Rand(0, this.money % 10 + 5);
+                this.shoppingList[ProductType.goods] = Randomizer.Rand(0, this.money % 10 + 5);
+            } while (this.shoppingList[ProductType.food] + this.shoppingList[ProductType.goods] <= 0);
         }
 
         /// <summary>
@@ -341,12 +347,6 @@ namespace Praktika2023
         /// <param name="shelf">Полка с товарами</param>
         public void FillTheCart(ProductShelf shelf)
         {
-            //генерируем случайное количество пищевых и хозяйственных товаров в списке покупок
-            do
-            {
-                this.shoppingList[ProductType.food] = Randomizer.Rand(0, this.money % 10 + 5);
-                this.shoppingList[ProductType.goods] = Randomizer.Rand(0, this.money % 10 + 5);
-            } while (this.shoppingList[ProductType.food] + this.shoppingList[ProductType.goods] <= 0);
             PriceSegment segment = new PriceSegment();
             int Try = 1, //номер попытки собрать корзину
                 totalCost = 0; //суммарная стоимость покупок
